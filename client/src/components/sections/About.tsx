@@ -1,31 +1,71 @@
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Mail, Phone } from "lucide-react";
+import { 
+  SiHtml5, SiCss3, SiJavascript, SiVuedotjs, SiNuxtdotjs, SiNextdotjs, SiVuetify, SiThreedotjs,
+  SiNodedotjs, SiNestjs, SiSpring, SiDjango, SiFlask, SiPython,
+  SiMysql, SiMongodb, SiPostgresql, SiMariadb, SiMongoose,
+  SiDocker, SiKubernetes, SiGooglecloud,
+  SiGraphql, SiRaspberrypi, SiArduino, SiEspressif
+} from "react-icons/si";
+import { TbApi } from "react-icons/tb";
 
 const techStack = [
   { 
     category: "Frontend", 
-    skills: ["HTML", "CSS", "JavaScript", "Vue.js", "Nuxt.js", "Next.js", "Vuetify", "Three.js"],
+    skills: [
+      { name: "HTML", icon: SiHtml5 },
+      { name: "CSS", icon: SiCss3 },
+      { name: "JavaScript", icon: SiJavascript },
+      { name: "Vue.js", icon: SiVuedotjs },
+      { name: "Nuxt.js", icon: SiNuxtdotjs },
+      { name: "Next.js", icon: SiNextdotjs },
+      { name: "Vuetify", icon: SiVuetify },
+      { name: "Three.js", icon: SiThreedotjs }
+    ],
     gradient: "from-blue-500/10 to-cyan-500/10"
   },
   { 
     category: "Backend", 
-    skills: ["Node.js", "Nest.js", "Java Spring", "Django", "Flask", "Python"],
+    skills: [
+      { name: "Node.js", icon: SiNodedotjs },
+      { name: "Nest.js", icon: SiNestjs },
+      { name: "Java Spring", icon: SiSpring },
+      { name: "Django", icon: SiDjango },
+      { name: "Flask", icon: SiFlask },
+      { name: "Python", icon: SiPython }
+    ],
     gradient: "from-green-500/10 to-emerald-500/10"
   },
   { 
     category: "Databases", 
-    skills: ["MySQL", "MongoDB", "PostgreSQL", "MariaDB", "Mongoose"],
+    skills: [
+      { name: "MySQL", icon: SiMysql },
+      { name: "MongoDB", icon: SiMongodb },
+      { name: "PostgreSQL", icon: SiPostgresql },
+      { name: "MariaDB", icon: SiMariadb },
+      { name: "Mongoose", icon: SiMongoose }
+    ],
     gradient: "from-orange-500/10 to-amber-500/10"
   },
   { 
     category: "DevOps", 
-    skills: ["Docker", "Kubernetes", "Google Cloud Platform"],
+    skills: [
+      { name: "Docker", icon: SiDocker },
+      { name: "Kubernetes", icon: SiKubernetes },
+      { name: "Google Cloud Platform", icon: SiGooglecloud }
+    ],
     gradient: "from-purple-500/10 to-pink-500/10"
   },
   { 
     category: "Others", 
-    skills: ["RESTful APIs", "GraphQL", "Raspberry Pi", "ESP", "Arduino"],
+    skills: [
+      { name: "RESTful APIs", icon: TbApi },
+      { name: "GraphQL", icon: SiGraphql },
+      { name: "Raspberry Pi", icon: SiRaspberrypi },
+      { name: "ESP", icon: SiEspressif },
+      { name: "Arduino", icon: SiArduino }
+    ],
     gradient: "from-red-500/10 to-rose-500/10"
   }
 ];
@@ -108,12 +148,13 @@ export default function About() {
                       <div className="flex flex-wrap gap-2">
                         {category.skills.map((skill) => (
                           <motion.span
-                            key={skill}
-                            className="px-3 py-1 bg-background/50 backdrop-blur-sm rounded-full text-sm font-medium hover:bg-background/70 transition-colors cursor-default"
+                            key={skill.name}
+                            className="px-3 py-1 bg-background/50 backdrop-blur-sm rounded-full text-sm font-medium hover:bg-background/70 transition-colors cursor-default flex items-center gap-1.5"
                             whileHover={{ scale: 1.05 }}
                             transition={{ type: "spring", stiffness: 400, damping: 10 }}
                           >
-                            {skill}
+                            <skill.icon className="h-4 w-4" />
+                            {skill.name}
                           </motion.span>
                         ))}
                       </div>
