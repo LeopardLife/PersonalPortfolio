@@ -2,10 +2,16 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import Scene3D from "@/components/3d/Scene3D";
 
 export default function Hero() {
   return (
-    <section className="min-h-screen flex items-center justify-center pt-16">
+    <section className="min-h-screen flex items-center justify-center pt-16 relative">
+      {/* 3D Background */}
+      <div className="absolute inset-0 -z-10 opacity-50">
+        <Scene3D />
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           {/* Left Column - Text Content */}
@@ -37,7 +43,7 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, type: "spring", stiffness: 260, damping: 20 }}
-            className="flex justify-center md:justify-end"
+            className="flex justify-center md:justify-end relative z-10"
           >
             <Avatar className="w-64 h-64 border-4 border-primary/20">
               <AvatarImage 
