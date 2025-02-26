@@ -2,14 +2,14 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import Scene3D from "@/components/3d/Scene3D";
+import ModelViewer from "@/components/3d/ModelViewer";
 
 export default function Hero() {
   return (
     <section className="min-h-screen flex items-center justify-center pt-16 relative">
       {/* 3D Background */}
-      <div className="absolute inset-0 -z-10 opacity-50">
-        <Scene3D />
+      <div className="absolute inset-0 -z-10 opacity-30">
+        <ModelViewer />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
