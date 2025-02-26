@@ -46,7 +46,7 @@ export default function ModelViewer() {
       auto-rotate
       rotation-per-second="30deg"
       interaction-prompt="none"
-      camera-orbit="45deg 55deg 2.5m"
+      camera-orbit="45deg 55deg 5m"
       environment-image="neutral"
       shadow-intensity="1"
       shadow-softness="0"

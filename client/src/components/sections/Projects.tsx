@@ -11,10 +11,10 @@ const projects = [
   },
   {
     title: "Synode.ai",
-    description: "A 3D step-by-step guide platform with text-to-speech and product customization features.",
+    description: "A 3D application developed for Synode Canada, designed to provide step-by-step assembly guides and product instructions using interactive 3D models, complete with text-to-speech and customization features.",
     tech: ["Nuxt.js", "Vue.js", "Vuetify", "Three.js", "Nest.js", "Google Cloud Platform"],
     githubUrl: "https://github.com/thuanpham113/synode-ai",
-    highlights: ["Built interactive 3D interfaces", "Implemented scalable Backend APIs"]
+    highlights: ["Leveraged Three.js extensively to load, render, and animate 3D files, creating an intuitive user experience for product assembly.", "Built a responsive Frontend with Nuxt.js, integrating it seamlessly with Backend APIs on Nest.js for real-time data and scalability.", "My deepest involvement was here—mastered 3D file handling and optimized performance for complex models."]
   },
   {
     title: "Rely for Plogg.ca",

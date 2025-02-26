@@ -1,22 +1,20 @@
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Mail, Phone } from "lucide-react";
-import { 
+import {
   SiHtml5, SiCss3, SiJavascript, SiVuedotjs, SiNuxtdotjs, SiNextdotjs, SiVuetify, SiThreedotjs,
   SiNodedotjs, SiNestjs, SiSpring, SiDjango, SiFlask, SiPython,
   SiMysql, SiMongodb, SiPostgresql, SiMariadb, SiMongoose,
   SiDocker, SiKubernetes, SiGooglecloud,
-  SiGraphql, SiRaspberrypi, SiArduino, SiEspressif
+  SiGraphql, SiRaspberrypi, SiArduino, SiEspressif,
+  SiGo
 } from "react-icons/si";
 import { TbApi } from "react-icons/tb";
 
 const techStack = [
-  { 
-    category: "Frontend", 
+  {
+    category: "Frontend",
     skills: [
-      { name: "HTML", icon: SiHtml5 },
-      { name: "CSS", icon: SiCss3 },
-      { name: "JavaScript", icon: SiJavascript },
       { name: "Vue.js", icon: SiVuedotjs },
       { name: "Nuxt.js", icon: SiNuxtdotjs },
       { name: "Next.js", icon: SiNextdotjs },
@@ -25,20 +23,19 @@ const techStack = [
     ],
     gradient: "from-blue-500/10 to-cyan-500/10"
   },
-  { 
-    category: "Backend", 
+  {
+    category: "Backend",
     skills: [
       { name: "Node.js", icon: SiNodedotjs },
       { name: "Nest.js", icon: SiNestjs },
       { name: "Java Spring", icon: SiSpring },
-      { name: "Django", icon: SiDjango },
-      { name: "Flask", icon: SiFlask },
-      { name: "Python", icon: SiPython }
+      { name: "Python", icon: SiPython },
+      { name: "Go", icon: SiGo }
     ],
     gradient: "from-green-500/10 to-emerald-500/10"
   },
-  { 
-    category: "Databases", 
+  {
+    category: "Databases",
     skills: [
       { name: "MySQL", icon: SiMysql },
       { name: "MongoDB", icon: SiMongodb },
@@ -48,17 +45,16 @@ const techStack = [
     ],
     gradient: "from-orange-500/10 to-amber-500/10"
   },
-  { 
-    category: "DevOps", 
+  {
+    category: "DevOps",
     skills: [
       { name: "Docker", icon: SiDocker },
-      { name: "Kubernetes", icon: SiKubernetes },
       { name: "Google Cloud Platform", icon: SiGooglecloud }
     ],
     gradient: "from-purple-500/10 to-pink-500/10"
   },
-  { 
-    category: "Others", 
+  {
+    category: "Others",
     skills: [
       { name: "RESTful APIs", icon: TbApi },
       { name: "GraphQL", icon: SiGraphql },
@@ -83,6 +79,51 @@ const container = {
 const item = {
   hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0 }
+};
+
+const TechStackGrid = () => {
+  return (
+    <div className="space-y-12">
+      <h3 className="text-2xl font-semibold text-center">Tech Stack</h3>
+
+      <motion.div
+        variants={container}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"
+      >
+        {techStack.map((category) => (
+          <motion.div
+            key={category.category}
+            variants={item}
+            className="col-span-1"
+          >
+            <Card className={`h-full bg-gradient-to-br ${category.gradient} backdrop-blur-lg border-0`}>
+              <CardContent className="p-4">
+                <h4 className="font-semibold text-lg mb-4 text-center border-b border-primary/10 pb-2">
+                  {category.category}
+                </h4>
+                <div className="flex flex-col gap-2">
+                  {category.skills.map((skill) => (
+                    <motion.div
+                      key={skill.name}
+                      className="flex items-center gap-2 p-2 bg-background/50 backdrop-blur-sm rounded-lg hover:bg-background/70 transition-all group"
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    >
+                      <skill.icon className="h-5 w-5 text-primary group-hover:scale-110 transition-transform" />
+                      <span className="text-sm font-medium">{skill.name}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </motion.div>
+    </div>
+  );
 };
 
 export default function About() {
@@ -132,37 +173,7 @@ export default function About() {
           </div>
 
           <div className="space-y-8">
-            <h3 className="text-2xl font-semibold text-center">Tech Stack</h3>
-            <motion.div 
-              variants={container}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-              className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
-            >
-              {techStack.map((category) => (
-                <motion.div key={category.category} variants={item}>
-                  <Card className={`overflow-hidden bg-gradient-to-br ${category.gradient} backdrop-blur-lg border-0`}>
-                    <CardContent className="pt-6">
-                      <h4 className="font-semibold text-lg mb-4">{category.category}</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {category.skills.map((skill) => (
-                          <motion.span
-                            key={skill.name}
-                            className="px-3 py-1 bg-background/50 backdrop-blur-sm rounded-full text-sm font-medium hover:bg-background/70 transition-colors cursor-default flex items-center gap-1.5"
-                            whileHover={{ scale: 1.05 }}
-                            transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                          >
-                            <skill.icon className="h-4 w-4" />
-                            {skill.name}
-                          </motion.span>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </motion.div>
+            <TechStackGrid />
           </div>
         </motion.div>
       </div>

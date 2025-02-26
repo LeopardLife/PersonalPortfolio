@@ -16,7 +16,7 @@ const experiences = [
     title: "Fullstack Developer",
     company: "Plogg Co. Ltd",
     description: [
-      "Developed PWAs and microservices using Nuxt.js, Nest.js, and GCP"
+      "Developed PWAs and microservices using Nuxt.js, Nest.js, and GCP, with significant contributions to Synode.ai"
     ]
   },
   {

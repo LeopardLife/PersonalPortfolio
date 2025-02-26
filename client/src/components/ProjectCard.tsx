@@ -23,8 +23,8 @@ export default function ProjectCard({
       <CardHeader>
         <CardTitle className="flex justify-between items-start">
           <span>{title}</span>
-          <Button variant="ghost" size="icon" asChild>
-            <a href={githubUrl} target="_blank" rel="noopener noreferrer">
+          <Button variant="ghost" size="icon" asChild disabled>
+            <a target="_blank" rel="noopener noreferrer">
               <Github className="h-5 w-5" />
             </a>
           </Button>
