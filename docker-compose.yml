@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development  # This now matches a stage in Dockerfile
+    container_name: portfolio-client
+    ports:
+      - "3001:5000"  # Changed from 3000:3000 to use port 3001 locally
+      - "9229:9229"  # Debug port
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://localhost:3001  # Updated to match new port
+    command: npm run dev
+    networks:
+      - portfolio-network
+    # Add healthcheck
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  portfolio-network:
+    driver: bridge

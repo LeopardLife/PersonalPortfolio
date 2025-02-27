@@ -41,7 +41,7 @@ export default function ModelViewer() {
   return (
     <model-viewer
       ref={modelViewerRef}
-      src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
+      src="/assets/terrarium-bots-nerdscribbles.glb"
       camera-controls
       auto-rotate
       rotation-per-second="30deg"
