@@ -1,6 +1,5 @@
 'use client'
 import { useState, useEffect } from "react";
-import { Link } from "wouter";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,6 +7,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import Link from "next/link";
 
 const navigation = [
   { name: "About", href: "#about" },
