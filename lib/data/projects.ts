@@ -60,9 +60,9 @@ export const projects: Project[] = [
 		title: "JOH Platform",
 		slug: "joh-platform",
 		description:
-			"AI-powered English assessment platform with automated TOEIC practice tests and comprehensive skill training.",
+			"AI-powered English assessment platform with automated PTE practice tests and comprehensive skill training.",
 		longDescription:
-			"Architected and developed a comprehensive English language assessment platform featuring automated TOEIC practice tests and skill-based training modules. Built as a full-stack freelance project comprising three interconnected systems: student-facing frontend, backend API with AI-powered scoring, and administrative panel for content management.",
+			"Architected and developed a comprehensive English language assessment platform featuring automated PTE practice tests and skill-based training modules. Built as a full-stack freelance project comprising three interconnected systems: student-facing frontend, backend API with AI-powered scoring, and administrative panel for content management.",
 		image: "/assets/projects/joh-platform.jpg",
 		tags: [
 			"Next.js 15",
@@ -107,7 +107,7 @@ export const projects: Project[] = [
 			scale: "Scalable Question Bank",
 		},
 		features: [
-			"Mock TOEIC test simulation with 4 skills (Reading, Listening, Writing, Speaking)",
+			"Mock PTE test simulation with 4 skills (Reading, Listening, Writing, Speaking)",
 			"Auto-submit timers and real-time audio recording with MediaRecorder API",
 			"AI-powered scoring using SpeechSuper API and LLM (ChatGPT/Gemini)",
 			"React Query for efficient data fetching and caching",

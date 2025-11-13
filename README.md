@@ -95,7 +95,7 @@ Created precise 2D and 3D technical drawings using SolidWorks for manufacturing 
 ### JOH Platform - English Assessment System (Freelance) (May 2025 - present)
 **Technologies:** Next.js 15, React 19, NestJS, MongoDB, Google Cloud Storage, TypeScript
 
-Architected and developed a comprehensive English language assessment platform featuring automated TOEIC practice tests and skill-based training modules. Built as a full-stack freelance project comprising three interconnected systems: student-facing frontend, backend API with AI-powered scoring, and administrative panel for content management.
+Architected and developed a comprehensive English language assessment platform featuring automated PTE practice tests and skill-based training modules. Built as a full-stack freelance project comprising three interconnected systems: student-facing frontend, backend API with AI-powered scoring, and administrative panel for content management.
 
 **Frontend (joh-frontend):** Implemented mock test simulation with four skills (Reading, Listening, Writing, Speaking) featuring auto-submit timers, real-time audio recording with MediaRecorder API, and detailed result breakdown. Utilized React Query (TanStack Query) for efficient data fetching and caching, NextAuth.js for JWT-based authentication, and custom AudioRecorder component with preparation countdown and duration controls. Organized architecture around domain-specific contexts (MockTestContext, GlobalModalContext) managing test state, modal overlays, and side panels. Achieved responsive design with Tailwind CSS and shadcn/ui components ensuring consistent UX across devices.
 
