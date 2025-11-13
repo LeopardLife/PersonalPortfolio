@@ -1,12 +1,12 @@
 'use client';
 
-import { motion } from "framer-motion";
 import ProjectCard from "@/components/ProjectCard";
 import { projects } from "@/lib/data/projects";
+import { motion } from "framer-motion";
 
 export default function Projects() {
   const featuredProjects = projects.filter(p => p.featured);
-  
+
   return (
     <section id="projects" className="py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

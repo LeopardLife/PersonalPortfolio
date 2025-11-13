@@ -16,7 +16,7 @@ services:
       - /app/.next
     environment:
       - NODE_ENV=development
-      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_URL=${DATABASE_URL:-postgresql://portfolio:portfolio123@postgres:5432/portfolio}
       - NEXT_TELEMETRY_DISABLED=1
     command: npm run dev
     networks:
@@ -28,33 +28,35 @@ services:
       retries: 3
       start_period: 40s
     restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
 
-  # PostgreSQL Database (optional - if using local DB instead of Neon)
-  # Uncomment if you want to use local PostgreSQL
-  # postgres:
-  #   image: postgres:16-alpine
-  #   container_name: portfolio-db
-  #   environment:
-  #     - POSTGRES_USER=portfolio
-  #     - POSTGRES_PASSWORD=portfolio123
-  #     - POSTGRES_DB=portfolio
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   networks:
-  #     - portfolio-network
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "pg_isready -U portfolio"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
-  #   restart: unless-stopped
+  # PostgreSQL Database (local database for development)
+  postgres:
+    image: postgres:16-alpine
+    container_name: portfolio-db
+    environment:
+      - POSTGRES_USER=portfolio
+      - POSTGRES_PASSWORD=portfolio123
+      - POSTGRES_DB=portfolio
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - portfolio-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U portfolio"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
 
 networks:
   portfolio-network:
     driver: bridge
 
-# volumes:
-#   postgres_data:
-#     driver: local
+volumes:
+  postgres_data:
+    driver: local
