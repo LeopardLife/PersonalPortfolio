@@ -1,12 +1,12 @@
 'use client';
 
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { ArrowDown } from "lucide-react";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import ModelViewer from "@/components/3d/ModelViewer";
-import { SiGo, SiReact, SiTypescript } from "react-icons/si";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { ArrowDown } from "lucide-react";
 import { FaJava } from "react-icons/fa";
+import { SiGo, SiReact, SiTypescript } from "react-icons/si";
 
 export default function Hero() {
   const techLogos = [

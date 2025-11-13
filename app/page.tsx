@@ -1,11 +1,11 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import Hero from '@/components/sections/Hero';
 import About from '@/components/sections/About';
-import Projects from '@/components/sections/Projects';
-import Experience from '@/components/sections/Experience';
-import Contact from '@/components/sections/Contact';
+import Contact from "@/components/sections/Contact";
+import Experience from "@/components/sections/Experience";
+import Hero from "@/components/sections/Hero";
+import Projects from "@/components/sections/Projects";
+import { motion } from "framer-motion";
 
 export default function Home() {
   return (

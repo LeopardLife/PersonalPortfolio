@@ -5,7 +5,7 @@ This is a fullstack TypeScript portfolio application featuring 3D visualizations
 
 **Monorepo Structure:**
 - `client/` - React SPA with Vite
-- `server/` - Express.js API server  
+- `server/` - Express.js API server
 - `shared/` - Common types and schemas
 
 **Key Stack:**

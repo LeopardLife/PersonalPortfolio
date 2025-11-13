@@ -1,13 +1,9 @@
 'use client';
 
-import { useState, useEffect } from "react";
-import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Moon, Sun } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const navigation = [
   { name: "About", href: "#about" },
