@@ -15,7 +15,10 @@
     "node_modules",
     "build",
     "dist",
-    "**/*.test.ts"
+    "**/*.test.ts",
+    "client",
+    "server",
+    "vite.config.ts"
   ],
   "compilerOptions": {
     "incremental": true,
