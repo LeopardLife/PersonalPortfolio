@@ -1,32 +1,60 @@
 version: '3.8'
 
 services:
-  client:
+  # Next.js Application
+  app:
     build:
       context: .
-      dockerfile: Dockerfile
-      target: development  # This now matches a stage in Dockerfile
-    container_name: portfolio-client
+      dockerfile: dockerfile
+      target: development
+    container_name: portfolio-nextjs
     ports:
-      - "3001:5000"  # Changed from 3000:3000 to use port 3001 locally
-      - "9229:9229"  # Debug port
+      - "3000:3000"
     volumes:
       - ./:/app
       - /app/node_modules
+      - /app/.next
     environment:
       - NODE_ENV=development
-      - VITE_API_URL=http://localhost:3001  # Updated to match new port
+      - DATABASE_URL=${DATABASE_URL}
+      - NEXT_TELEMETRY_DISABLED=1
     command: npm run dev
     networks:
       - portfolio-network
-    # Add healthcheck
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
+    restart: unless-stopped
+
+  # PostgreSQL Database (optional - if using local DB instead of Neon)
+  # Uncomment if you want to use local PostgreSQL
+  # postgres:
+  #   image: postgres:16-alpine
+  #   container_name: portfolio-db
+  #   environment:
+  #     - POSTGRES_USER=portfolio
+  #     - POSTGRES_PASSWORD=portfolio123
+  #     - POSTGRES_DB=portfolio
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - portfolio-network
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U portfolio"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   restart: unless-stopped
 
 networks:
   portfolio-network:
     driver: bridge
+
+# volumes:
+#   postgres_data:
+#     driver: local
