@@ -1,104 +1,108 @@
 # Personal Portfolio - Copilot Instructions
 
 ## Architecture Overview
-This is a fullstack TypeScript portfolio application featuring 3D visualizations with a modern tech stack:
-
-**Monorepo Structure:**
-- `client/` - React SPA with Vite
-- `server/` - Express.js API server
-- `shared/` - Common types and schemas
+Next.js 16 portfolio application with 3D visualizations and modern fullstack architecture.
 
 **Key Stack:**
-- Frontend: React 18 + Vite + Wouter (routing) + Shadcn/ui + Tailwind CSS
-- 3D Graphics: Three.js + React Three Fiber + Model Viewer
-- Backend: Express.js + TypeScript
+- Framework: Next.js 16 with App Router + Turbopack (default)
+- Frontend: React 18 + Shadcn/ui + Tailwind CSS + Framer Motion
+- 3D Graphics: Three.js + React Three Fiber + Google Model Viewer web component
 - Database: PostgreSQL + Drizzle ORM
-- Styling: Tailwind CSS with CSS custom properties via `theme.json`
+- State: React Query (`@tanstack/react-query`) for server state
+- Styling: Tailwind CSS with CSS custom properties controlled by `theme.json`
+
+**Dual Architecture (Migration in Progress):**
+- **Primary**: `app/` directory (Next.js App Router) - active development
+- **Legacy**: `client/` directory (Vite SPA) + `server/` (Express) - retained for reference
+- Components live in root `components/` shared by both architectures
 
 ## Development Workflow
 
-**Start Development:**
 ```bash
-npm run dev  # Runs server on port 5000 (serves both API and client)
+npm run dev      # Next.js dev server with Turbopack
+npm run build    # Next.js production build
+npm start        # Next.js production server
+npm run db:push  # Push Drizzle schema changes to PostgreSQL
 ```
 
-**Database Operations:**
-```bash
-npm run db:push  # Push schema changes to database
-```
-
-**Build for Production:**
-```bash
-npm run build   # Builds client with Vite + server with esbuild
-npm start       # Production server
-```
+**Important**: Despite legacy `server/` directory, this is now a **Next.js application**. API routes use Next.js Route Handlers in `app/api/*/route.ts`, not Express.
 
 ## Key Patterns & Conventions
 
 ### File Organization
-- **UI Components**: Use Shadcn/ui pattern in `client/src/components/ui/`
-- **Section Components**: Page sections in `client/src/components/sections/`
-- **3D Components**: Three.js components in `client/src/components/3d/`
-- **Route Structure**: Single-page app with sections (Hero, About, Projects, etc.)
+- **Page Components**: `app/page.tsx` (client component with section imports)
+- **Section Components**: `components/sections/` (Hero, About, Projects, Experience, Contact)
+- **UI Components**: `components/ui/` (Shadcn pattern - never edit manually, regenerate)
+- **3D Components**: `components/3d/` (ModelViewer, Scene3D, FloatingShape)
+- **API Routes**: `app/api/*/route.ts` (Next.js Route Handlers)
+
+### Client vs Server Components
+- **All page/section components use `'use client'` directive** (required for Framer Motion and interactivity)
+- Root layout (`app/layout.tsx`) is server component with metadata
+- Providers wrapper (`app/providers.tsx`) handles React Query setup
 
 ### Styling System
-- **Theme Configuration**: Controlled via `theme.json` (primary color, variant, radius)
-- **Color System**: CSS custom properties following Shadcn convention (`--primary`, `--background`, etc.)
-- **Component Styling**: Use `cn()` utility from `@/lib/utils` for conditional classes
-- **Responsive Design**: Mobile-first with Tailwind breakpoints
+- **Theme Source of Truth**: `theme.json` defines primary color, variant, appearance, radius
+- **CSS Variables**: Injected via `app/globals.css` following Shadcn convention (`--primary`, `--background`, etc.)
+- **Tailwind Config**: `tailwind.config.ts` references CSS variables, content includes `app/`, `components/`, `pages/`
+- **Utility Function**: Use `cn()` from `@/lib/utils` for conditional Tailwind classes
 
 ### 3D Integration Patterns
-- **Model Viewer**: Use Google's Model Viewer for GLB files (see `ModelViewer.tsx`)
-- **Three.js Integration**: React Three Fiber for interactive 3D scenes
-- **Performance**: 3D models as background elements with low opacity for subtle effects
-
-### Backend Patterns
-- **API Routes**: Prefix all routes with `/api` in `server/routes.ts`
-- **Storage Interface**: Use `IStorage` interface pattern for database operations
-- **Schema Management**: Drizzle ORM with schemas in `shared/schema.ts`
-- **Request Logging**: Automatic API request logging with response time tracking
+- **Model Viewer Web Component**: Preferred for GLB files (see `components/3d/ModelViewer.tsx`)
+  - Dynamically loads script from `ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/`
+  - Custom TypeScript declaration for JSX intrinsic element
+  - Props: `camera-controls`, `auto-rotate`, `rotation-per-second`, `interaction-prompt`
+- **Asset Location**: `/public/assets/*.glb` served statically
+- **Background Usage**: 3D elements rendered with low opacity (`opacity-30`) as non-blocking backgrounds
+- **Performance**: Model Viewer handles optimization better than raw Three.js for static models
 
 ### Component Architecture
-- **Animation**: Framer Motion for page/section transitions
-- **State Management**: React Query for server state
-- **Form Handling**: React Hook Form with Zod validation
-- **Icons**: Mix of Lucide React and React Icons (SI prefixed for brands)
+- **Animation**: Framer Motion with `initial`, `animate`, `transition` props on `motion.div`
+- **Icons**: Mix of Lucide React (`lucide-react`) and React Icons (`react-icons`) - use `Si` prefix for brand logos
+- **Forms**: React Hook Form + Zod validation (setup exists via Shadcn)
+- **Toast Notifications**: Shadcn toast system with `<Toaster />` in layout
+
+### Database Layer
+- **Schema Location**: `shared/schema.ts` (single source of truth)
+- **ORM**: Drizzle with Neon PostgreSQL driver (`@neondatabase/serverless`)
+- **Config**: `drizzle.config.ts` points to `shared/schema.ts`, outputs to `./migrations`
+- **Connection**: Requires `DATABASE_URL` environment variable
+- **Types**: Auto-generated with `$inferSelect` and Zod schemas via `createInsertSchema`
 
 ## Critical Integration Points
 
-### Vite Configuration
-- **Aliases**: `@` → `client/src`, `@shared` → `shared`
-- **Development**: Vite dev server integrated into Express in development
-- **Production**: Static files served by Express
+### Path Aliases
+TypeScript `paths` in `tsconfig.json`:
+- `@/*` → root directory
+- `@/components/*` → `components/`
+- `@/app/*` → `app/`
+- `@/lib/*` → `lib/`
 
-### Database Layer
-- **Schema**: PostgreSQL with Drizzle ORM schemas in `shared/`
-- **Migrations**: Generated in `./migrations` directory
-- **Environment**: Requires `DATABASE_URL` environment variable
+**Note**: Legacy `vite.config.ts` has different aliases (`@` → `client/src`) - ignore when working in Next.js context.
 
-### Docker Development
-- **Port Mapping**: Container port 5000 → host port 3001
-- **Hot Reload**: Volume mounted for live development
-- **Health Checks**: Built-in container health monitoring
+### Next.js Configuration
+- **Transpile Packages**: `transpilePackages: ['three', '@react-three/fiber', '@react-three/drei']` required for 3D libraries
+- **Turbopack**: Default in Next.js 16, empty config to silence webpack warnings
+- **Strict Mode**: Enabled (`reactStrictMode: true`)
+
+### State Management
+- **Query Client**: Configured in `app/providers.tsx` with 60s `staleTime`
+- **Pattern**: Wrap mutations/queries with React Query hooks, defined in component files or custom hooks
 
 ## Project-Specific Conventions
 
-### Portfolio Content Structure
-- **Projects**: Hardcoded array in `Projects.tsx` with GitHub links and tech stacks
-- **Skills Display**: Icon-based tech logos in Hero section
-- **Experience**: Timeline-based layout using custom `TimelineItem` component
+### Portfolio Content
+- **Hardcoded Data**: Projects, experience, skills defined inline in section components (no CMS)
+- **Tech Logos**: Icon components from `react-icons/fa` and `react-icons/si` in `Hero.tsx`
+- **Timeline Layout**: Custom `TimelineItem` component in `components/` for experience display
 
-### 3D Asset Handling
-- **Model Files**: Store GLB files in `client/public/assets/`
-- **Loading**: Use Model Viewer web component for reliable GLB rendering
-- **Fallbacks**: Ensure 3D elements are non-blocking background enhancements
+### Migration Notes
+- `client/` and `server/` directories are **legacy** - do not add new features there
+- When adding API routes, use Next.js Route Handlers in `app/api/`
+- Shared types in `shared/` still valid for database schemas
+- Component duplication exists between `client/src/components/` and `components/` - prioritize root `components/`
 
-### Performance Optimizations
-- **Bundle Splitting**: Vite handles automatic code splitting
-- **Asset Loading**: Lazy loading for heavy 3D models and images
-- **Request Logging**: Custom middleware tracks API performance
-
-## Environment Setup Requirements
-- Node.js with npm/bun support
+## Environment Requirements
+- Node.js 20+ (specified in `@types/node`)
 - PostgreSQL database with `DATABASE_URL` configured
-- Development runs on single port (5000) serving both client and API
+- Development server runs on default Next.js port (3000)
