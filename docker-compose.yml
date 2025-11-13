@@ -1,34 +1,34 @@
 services:
   # Next.js Application (Development)
-  app:
-    build:
-      context: .
-      dockerfile: dockerfile
-      target: development
-    container_name: portfolio-nextjs-dev
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./:/app
-      - /app/node_modules
-      - /app/.next
-    environment:
-      - NODE_ENV=development
-      - DATABASE_URL=${DATABASE_URL:-postgresql://portfolio:portfolio123@postgres:5432/portfolio}
-      - NEXT_TELEMETRY_DISABLED=1
-    command: npm run dev
-    networks:
-      - portfolio-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    restart: unless-stopped
-    depends_on:
-      postgres:
-        condition: service_healthy
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: dockerfile
+  #     target: development
+  #   container_name: portfolio-nextjs-dev
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./:/app
+  #     - /app/node_modules
+  #     - /app/.next
+  #   environment:
+  #     - NODE_ENV=development
+  #     - DATABASE_URL=${DATABASE_URL:-postgresql://portfolio:portfolio123@postgres:5432/portfolio}
+  #     - NEXT_TELEMETRY_DISABLED=1
+  #   command: npm run dev
+  #   networks:
+  #     - portfolio-network
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:3000"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+  #     start_period: 40s
+  #   restart: unless-stopped
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
 
   # Next.js Application (Production)
   app-prod:
@@ -38,7 +38,7 @@ services:
       target: production
     container_name: portfolio-nextjs-prod
     ports:
-      - "3001:3000"
+      - "3000:3000"
     environment:
       - NODE_ENV=production
       - DATABASE_URL=${DATABASE_URL:-postgresql://portfolio:portfolio123@postgres:5432/portfolio}
