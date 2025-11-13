@@ -92,6 +92,25 @@ Created precise 2D and 3D technical drawings using SolidWorks for manufacturing 
 
 ## Key Projects
 
+### JOH Platform - English Assessment System (Freelance) (May 2025 - present)
+**Technologies:** Next.js 15, React 19, NestJS, MongoDB, Google Cloud Storage, TypeScript
+
+Architected and developed a comprehensive English language assessment platform featuring automated TOEIC practice tests and skill-based training modules. Built as a full-stack freelance project comprising three interconnected systems: student-facing frontend, backend API with AI-powered scoring, and administrative panel for content management.
+
+**Frontend (joh-frontend):** Implemented mock test simulation with four skills (Reading, Listening, Writing, Speaking) featuring auto-submit timers, real-time audio recording with MediaRecorder API, and detailed result breakdown. Utilized React Query (TanStack Query) for efficient data fetching and caching, NextAuth.js for JWT-based authentication, and custom AudioRecorder component with preparation countdown and duration controls. Organized architecture around domain-specific contexts (MockTestContext, GlobalModalContext) managing test state, modal overlays, and side panels. Achieved responsive design with Tailwind CSS and shadcn/ui components ensuring consistent UX across devices.
+
+**Backend (joh-backend):** Designed modular NestJS architecture with domain-driven modules (mock-test, question, student-answer) integrating multiple external services. Implemented SpeechSuper API integration for automated speaking assessment, LLM providers (ChatGPT/Gemini) for writing evaluation, and Google Cloud Storage for audio/media asset management. Secured endpoints with JWT authentication and API-key guards for internal service communication. Leveraged Mongoose for MongoDB operations with event-driven architecture using EventEmitter for asynchronous processing workflows. Generated comprehensive API documentation with Swagger for seamless frontend-backend integration.
+
+**Admin Panel (joh-admin):** Created management dashboard enabling educators to create, organize, and export test content across all four language skills. Implemented advanced filtering by skill type, difficulty level, and practice status with search and pagination capabilities. Built intuitive question editor supporting multiple formats including Multiple Choice, Fill in the Blanks, Essay, and speaking prompts with custom metadata (chart types for Describe Image). Designed component-based architecture with reusable hooks and modular structure facilitating easy extension for new question types.
+
+**Key Technical Achievements:**
+- Reduced API response times through strategic caching with React Query invalidation patterns
+- Implemented real-time audio recording with auto-start/stop based on preparation and recording durations
+- Developed AI-powered scoring pipeline processing writing essays and speaking responses with configurable LLM providers
+- Created scalable admin interface managing large question banks with efficient filtering and bulk operations
+- Established secure authentication flow with automatic token refresh and 401 error handling
+- Deployed media assets to Google Cloud Storage with optimized delivery for audio playback in practice sessions
+
 ### Synode.ai - 3D Assembly Guide Platform
 **Technologies:** Nuxt.js, Vue.js, Vuetify, Three.js, NestJS, Google Cloud Platform
 

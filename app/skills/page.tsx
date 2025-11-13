@@ -114,230 +114,309 @@ const fadeInUp = {
 
 export default function SkillsPage() {
   return (
-    <div className="min-h-screen pt-24 pb-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
-        >
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4">
-            Skills & Technologies
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            A comprehensive overview of my technical expertise, tools, and methodologies
-            built over 4+ years of professional development.
-          </p>
-        </motion.div>
+		<div className="min-h-screen pt-24 pb-16 relative">
+			{/* Background Effects */}
+			<div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background pointer-events-none" />
+			<div className="absolute top-32 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-20 animate-pulse" />
+			<div className="absolute top-64 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl opacity-20 animate-pulse delay-1000" />
 
-        {/* Technical Skills */}
-        <motion.div {...fadeInUp} className="mb-16">
-          <h2 className="text-3xl font-bold mb-8 flex items-center gap-2">
-            <Code2 className="w-8 h-8 text-primary" />
-            Technical Skills
-          </h2>
+			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+				{/* Header */}
+				<motion.div
+					initial={{ opacity: 0, y: 20 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.5 }}
+					className="text-center mb-16"
+				>
+					{/* Badge */}
+					<motion.div
+						initial={{ opacity: 0, scale: 0.8 }}
+						animate={{ opacity: 1, scale: 1 }}
+						transition={{ duration: 0.5, delay: 0.1 }}
+						className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6"
+					>
+						<Code2 className="w-4 h-4 text-primary" />
+						<span className="text-sm font-medium text-primary">
+							Technical Arsenal
+						</span>
+					</motion.div>
 
-          <Tabs defaultValue="frontend" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 mb-8">
-              <TabsTrigger value="frontend">Frontend</TabsTrigger>
-              <TabsTrigger value="backend">Backend</TabsTrigger>
-              <TabsTrigger value="database">Database</TabsTrigger>
-              <TabsTrigger value="tools">Tools & DevOps</TabsTrigger>
-            </TabsList>
+					<h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-transparent bg-clip-text">
+						Skills & Technologies
+					</h1>
+					<p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+						A comprehensive overview of my technical expertise,
+						tools, and methodologies built over 4+ years of
+						professional development.
+					</p>
+				</motion.div>
 
-            {Object.entries(technicalSkills).map(([category, skills]) => (
-              <TabsContent key={category} value={category}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {skills.map((skill, index) => {
-                    const Icon = skill.icon;
-                    return (
-                      <motion.div
-                        key={skill.name}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.05 }}
-                      >
-                        <Card>
-                          <CardContent className="pt-6">
-                            <div className="flex items-center justify-between mb-4">
-                              <div className="flex items-center gap-3">
-                                <div
-                                  className="p-2 rounded-lg"
-                                  style={{ backgroundColor: `${skill.color}20` }}
-                                >
-                                  <Icon
-                                    className="w-6 h-6"
-                                    style={{ color: skill.color }}
-                                  />
-                                </div>
-                                <div>
-                                  <h3 className="font-semibold">{skill.name}</h3>
-                                  <p className="text-sm text-muted-foreground">
-                                    {skill.years} years experience
-                                  </p>
-                                </div>
-                              </div>
-                              <div className="text-right">
-                                <div className="text-2xl font-bold text-primary">
-                                  {skill.level}%
-                                </div>
-                                <div className="text-xs text-muted-foreground">
-                                  Proficiency
-                                </div>
-                              </div>
-                            </div>
-                            <Progress value={skill.level} className="h-2" />
-                          </CardContent>
-                        </Card>
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              </TabsContent>
-            ))}
-          </Tabs>
-        </motion.div>
+				{/* Technical Skills */}
+				<motion.div {...fadeInUp} className="mb-16">
+					<h2 className="text-3xl font-bold mb-8 flex items-center gap-3 bg-gradient-to-r from-primary to-purple-500 text-transparent bg-clip-text">
+						<Code2 className="w-8 h-8 text-primary" />
+						Technical Skills
+					</h2>
 
-        {/* Areas of Expertise */}
-        <motion.div {...fadeInUp} className="mb-16">
-          <h2 className="text-3xl font-bold mb-8 flex items-center gap-2">
-            <Sparkles className="w-8 h-8 text-primary" />
-            Areas of Expertise
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {expertise.map((area, index) => {
-              const Icon = area.icon;
-              return (
-                <motion.div
-                  key={area.title}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                >
-                  <Card className="h-full hover:shadow-lg transition-shadow">
-                    <CardContent className="pt-6 text-center">
-                      <div className="inline-flex p-4 rounded-full bg-primary/10 mb-4">
-                        <Icon className="w-8 h-8 text-primary" />
-                      </div>
-                      <h3 className="font-bold mb-2">{area.title}</h3>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        {area.description}
-                      </p>
-                      <Badge variant="secondary">
-                        {area.projects} Projects
-                      </Badge>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              );
-            })}
-          </div>
-        </motion.div>
+					<Tabs defaultValue="frontend" className="w-full">
+						<TabsList className="grid w-full grid-cols-4 mb-8 bg-card/50 backdrop-blur">
+							<TabsTrigger value="frontend">Frontend</TabsTrigger>
+							<TabsTrigger value="backend">Backend</TabsTrigger>
+							<TabsTrigger value="database">Database</TabsTrigger>
+							<TabsTrigger value="tools">
+								Tools & DevOps
+							</TabsTrigger>
+						</TabsList>
 
-        {/* Soft Skills */}
-        <motion.div {...fadeInUp} className="mb-16">
-          <h2 className="text-3xl font-bold mb-8 flex items-center gap-2">
-            <Users className="w-8 h-8 text-primary" />
-            Soft Skills
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {softSkills.map((skill, index) => {
-              const Icon = skill.icon;
-              return (
-                <motion.div
-                  key={skill.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                >
-                  <Card className="h-full">
-                    <CardContent className="pt-6">
-                      <div className="flex items-start gap-3">
-                        <div className="p-2 rounded-lg bg-primary/10">
-                          <Icon className="w-6 h-6 text-primary" />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold mb-2">{skill.name}</h3>
-                          <p className="text-sm text-muted-foreground">
-                            {skill.description}
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              );
-            })}
-          </div>
-        </motion.div>
+						{Object.entries(technicalSkills).map(
+							([category, skills]) => (
+								<TabsContent key={category} value={category}>
+									<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+										{skills.map((skill, index) => {
+											const Icon = skill.icon;
+											return (
+												<motion.div
+													key={skill.name}
+													initial={{
+														opacity: 0,
+														x: -20,
+													}}
+													animate={{
+														opacity: 1,
+														x: 0,
+													}}
+													transition={{
+														duration: 0.3,
+														delay: index * 0.05,
+													}}
+												>
+													<Card className="hover:shadow-lg transition-all border-2 hover:border-primary/50 bg-card/50 backdrop-blur group">
+														<CardContent className="pt-6">
+															<div className="flex items-center justify-between mb-4">
+																<div className="flex items-center gap-3">
+																	<div
+																		className="p-2.5 rounded-lg group-hover:scale-110 transition-transform"
+																		style={{
+																			backgroundColor: `${skill.color}20`,
+																		}}
+																	>
+																		<Icon
+																			className="w-6 h-6"
+																			style={{
+																				color: skill.color,
+																			}}
+																		/>
+																	</div>
+																	<div>
+																		<h3 className="font-semibold group-hover:text-primary transition-colors">
+																			{
+																				skill.name
+																			}
+																		</h3>
+																		<p className="text-sm text-muted-foreground font-medium">
+																			{
+																				skill.years
+																			}{" "}
+																			years
+																			experience
+																		</p>
+																	</div>
+																</div>
+																<div className="text-right">
+																	<div className="text-2xl font-bold bg-gradient-to-r from-primary to-purple-500 text-transparent bg-clip-text">
+																		{
+																			skill.level
+																		}
+																		%
+																	</div>
+																	<div className="text-xs text-muted-foreground font-medium">
+																		Proficiency
+																	</div>
+																</div>
+															</div>
+															<Progress
+																value={
+																	skill.level
+																}
+																className="h-2.5"
+															/>
+														</CardContent>
+													</Card>
+												</motion.div>
+											);
+										})}
+									</div>
+								</TabsContent>
+							)
+						)}
+					</Tabs>
+				</motion.div>
 
-        {/* Quick Stats */}
-        <motion.div {...fadeInUp}>
-          <Card className="bg-gradient-to-r from-primary/10 to-primary/5">
-            <CardContent className="pt-6">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-8 text-center">
-                <div>
-                  <div className="flex justify-center mb-2">
-                    <Gauge className="w-8 h-8 text-primary" />
-                  </div>
-                  <div className="text-3xl font-bold mb-1">20+</div>
-                  <div className="text-sm text-muted-foreground">Technologies</div>
-                </div>
-                <div>
-                  <div className="flex justify-center mb-2">
-                    <CheckCircle2 className="w-8 h-8 text-primary" />
-                  </div>
-                  <div className="text-3xl font-bold mb-1">8+</div>
-                  <div className="text-sm text-muted-foreground">
-                    Projects Completed
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-center mb-2">
-                    <Rocket className="w-8 h-8 text-primary" />
-                  </div>
-                  <div className="text-3xl font-bold mb-1">4+</div>
-                  <div className="text-sm text-muted-foreground">
-                    Years Experience
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+				{/* Areas of Expertise */}
+				<motion.div {...fadeInUp} className="mb-16">
+					<h2 className="text-3xl font-bold mb-8 flex items-center gap-3 bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">
+						<Sparkles className="w-8 h-8 text-purple-500" />
+						Areas of Expertise
+					</h2>
+					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+						{expertise.map((area, index) => {
+							const Icon = area.icon;
+							return (
+								<motion.div
+									key={area.title}
+									initial={{ opacity: 0, scale: 0.9 }}
+									whileInView={{ opacity: 1, scale: 1 }}
+									viewport={{ once: true }}
+									transition={{
+										duration: 0.3,
+										delay: index * 0.1,
+									}}
+									whileHover={{ y: -8, scale: 1.05 }}
+								>
+									<Card className="h-full hover:shadow-2xl transition-all border-2 hover:border-primary/50 bg-card/50 backdrop-blur group">
+										<CardContent className="pt-6 text-center">
+											<motion.div
+												className="inline-flex p-4 rounded-full bg-primary/10 mb-4 group-hover:scale-110 transition-transform"
+												whileHover={{ rotate: 360 }}
+												transition={{ duration: 0.6 }}
+											>
+												<Icon className="w-8 h-8 text-primary" />
+											</motion.div>
+											<h3 className="font-bold mb-2 group-hover:text-primary transition-colors">
+												{area.title}
+											</h3>
+											<p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+												{area.description}
+											</p>
+											<Badge
+												variant="outline"
+												className="hover:bg-primary/10 hover:text-primary hover:border-primary/50 transition-colors"
+											>
+												{area.projects} Projects
+											</Badge>
+										</CardContent>
+									</Card>
+								</motion.div>
+							);
+						})}
+					</div>
+				</motion.div>
 
-        {/* Bottom CTA */}
-        <motion.div
-          {...fadeInUp}
-          className="text-center mt-16 p-8 rounded-lg bg-gradient-to-r from-primary/10 to-primary/5"
-        >
-          <h2 className="text-2xl font-bold mb-4">
-            Ready to work together?
-          </h2>
-          <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-            Let's discuss how my skills and experience can help bring your project
-            to life.
-          </p>
-          <div className="flex gap-4 justify-center">
-            <a
-              href="/projects"
-              className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
-            >
-              View My Work
-            </a>
-            <a
-              href="/contact"
-              className="inline-flex items-center justify-center rounded-md border border-input bg-background px-6 py-3 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
-            >
-              Contact Me
-            </a>
-          </div>
-        </motion.div>
-      </div>
-    </div>
+				{/* Soft Skills */}
+				<motion.div {...fadeInUp} className="mb-16">
+					<h2 className="text-3xl font-bold mb-8 flex items-center gap-3 bg-gradient-to-r from-green-500 to-emerald-500 text-transparent bg-clip-text">
+						<Users className="w-8 h-8 text-green-500" />
+						Soft Skills
+					</h2>
+					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+						{softSkills.map((skill, index) => {
+							const Icon = skill.icon;
+							return (
+								<motion.div
+									key={skill.name}
+									initial={{ opacity: 0, y: 20 }}
+									whileInView={{ opacity: 1, y: 0 }}
+									viewport={{ once: true }}
+									transition={{
+										duration: 0.3,
+										delay: index * 0.1,
+									}}
+									whileHover={{ y: -5 }}
+								>
+									<Card className="h-full hover:shadow-lg transition-all border-2 hover:border-primary/50 bg-card/50 backdrop-blur group">
+										<CardContent className="pt-6">
+											<div className="flex items-start gap-3">
+												<div className="p-2.5 rounded-lg bg-primary/10 group-hover:scale-110 transition-transform">
+													<Icon className="w-6 h-6 text-primary" />
+												</div>
+												<div>
+													<h3 className="font-semibold mb-2 group-hover:text-primary transition-colors">
+														{skill.name}
+													</h3>
+													<p className="text-sm text-muted-foreground">
+														{skill.description}
+													</p>
+												</div>
+											</div>
+										</CardContent>
+									</Card>
+								</motion.div>
+							);
+						})}
+					</div>
+				</motion.div>
+
+				{/* Quick Stats */}
+				<motion.div {...fadeInUp}>
+					<Card className="bg-gradient-to-r from-primary/10 to-primary/5">
+						<CardContent className="pt-6">
+							<div className="grid grid-cols-2 md:grid-cols-3 gap-8 text-center">
+								<div>
+									<div className="flex justify-center mb-2">
+										<Gauge className="w-8 h-8 text-primary" />
+									</div>
+									<div className="text-3xl font-bold mb-1">
+										20+
+									</div>
+									<div className="text-sm text-muted-foreground">
+										Technologies
+									</div>
+								</div>
+								<div>
+									<div className="flex justify-center mb-2">
+										<CheckCircle2 className="w-8 h-8 text-primary" />
+									</div>
+									<div className="text-3xl font-bold mb-1">
+										8+
+									</div>
+									<div className="text-sm text-muted-foreground">
+										Projects Completed
+									</div>
+								</div>
+								<div>
+									<div className="flex justify-center mb-2">
+										<Rocket className="w-8 h-8 text-primary" />
+									</div>
+									<div className="text-3xl font-bold mb-1">
+										4+
+									</div>
+									<div className="text-sm text-muted-foreground">
+										Years Experience
+									</div>
+								</div>
+							</div>
+						</CardContent>
+					</Card>
+				</motion.div>
+
+				{/* Bottom CTA */}
+				<motion.div
+					{...fadeInUp}
+					className="text-center mt-16 p-8 rounded-lg bg-gradient-to-r from-primary/10 to-primary/5"
+				>
+					<h2 className="text-2xl font-bold mb-4">
+						Ready to work together?
+					</h2>
+					<p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+						Let's discuss how my skills and experience can help
+						bring your project to life.
+					</p>
+					<div className="flex gap-4 justify-center">
+						<a
+							href="/projects"
+							className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+						>
+							View My Work
+						</a>
+						<a
+							href="/contact"
+							className="inline-flex items-center justify-center rounded-md border border-input bg-background px-6 py-3 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
+						>
+							Contact Me
+						</a>
+					</div>
+				</motion.div>
+			</div>
+		</div>
   );
 }

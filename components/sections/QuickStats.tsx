@@ -1,68 +1,67 @@
 'use client';
 
-import { motion, useInView, useMotionValue, useSpring } from 'framer-motion';
-import { Award, Briefcase, Code2, Users } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { animate, motion, useInView } from "framer-motion";
+import { Award, Briefcase, Code2, Users } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 const stats = [
-  {
-    icon: Briefcase,
-    value: 4,
-    suffix: '+',
-    label: 'Years Experience',
-    color: 'text-blue-500',
-    bgColor: 'bg-blue-500/10',
-  },
-  {
-    icon: Code2,
-    value: 8,
-    suffix: '+',
-    label: 'Projects Delivered',
-    color: 'text-green-500',
-    bgColor: 'bg-green-500/10',
-  },
-  {
-    icon: Users,
-    value: 200,
-    suffix: '+',
-    label: 'Clients Served',
-    color: 'text-purple-500',
-    bgColor: 'bg-purple-500/10',
-  },
-  {
-    icon: Award,
-    value: 60,
-    suffix: '%',
-    label: 'Performance Boost',
-    color: 'text-orange-500',
-    bgColor: 'bg-orange-500/10',
-  },
+	{
+		icon: Briefcase,
+		value: 4,
+		suffix: "+",
+		label: "Years Experience",
+		color: "text-blue-500",
+		bgColor: "bg-blue-500/10",
+	},
+	{
+		icon: Code2,
+		value: 5,
+		suffix: "+",
+		label: "Projects Delivered",
+		color: "text-green-500",
+		bgColor: "bg-green-500/10",
+	},
+	{
+		icon: Users,
+		value: 200,
+		suffix: "+",
+		label: "Clients Served",
+		color: "text-purple-500",
+		bgColor: "bg-purple-500/10",
+	},
+	{
+		icon: Award,
+		value: 60,
+		suffix: "%",
+		label: "Performance Boost",
+		color: "text-orange-500",
+		bgColor: "bg-orange-500/10",
+	},
 ];
 
-function Counter({ value, suffix = '' }: { value: number; suffix?: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const motionValue = useMotionValue(0);
-  const springValue = useSpring(motionValue, {
-    damping: 50,
-    stiffness: 100,
-  });
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+function Counter({ value, suffix = "" }: { value: number; suffix?: string }) {
+	const ref = useRef<HTMLSpanElement>(null);
+	const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-  useEffect(() => {
-    if (isInView) {
-      motionValue.set(value);
-    }
-  }, [motionValue, isInView, value]);
+	useEffect(() => {
+		if (!isInView) return;
 
-  useEffect(() => {
-    springValue.on('change', (latest) => {
-      if (ref.current) {
-        ref.current.textContent = Math.floor(latest).toLocaleString() + suffix;
-      }
-    });
-  }, [springValue, suffix]);
+		const node = ref.current;
+		if (!node) return;
 
-  return <span ref={ref} />;
+		// Animate from 0 to target value with easeIn (slow to fast)
+		const controls = animate(0, value, {
+			duration: 2.5,
+			ease: [0.42, 0, 1, 1], // cubic-bezier easeIn - starts slow, ends fast
+			onUpdate(latest) {
+				node.textContent = Math.floor(latest).toLocaleString() + suffix;
+			},
+		});
+
+		return () => controls.stop();
+	}, [isInView, value, suffix]);
+
+	return <span ref={ref}>0{suffix}</span>;
 }
 
 export default function QuickStats() {
