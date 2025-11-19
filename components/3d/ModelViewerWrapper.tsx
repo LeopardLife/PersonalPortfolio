@@ -9,6 +9,7 @@ interface ModelViewerProps {
   ar?: boolean;
   autoRotate?: boolean;
   cameraControls?: boolean;
+	iosSrc?: string;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -20,48 +21,79 @@ export default function ModelViewerWrapper({
   ar = true,
   autoRotate = true,
   cameraControls = true,
+  iosSrc,
   className,
   style,
 }: ModelViewerProps) {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    import('@google/model-viewer').then(() => {
-      setIsMounted(true);
-    });
+		// Ensure <model-viewer> is defined once across HMR reloads
+		let cancelled = false;
+		const ensureDefined = async () => {
+			if (customElements.get("model-viewer")) {
+				if (!cancelled) setIsMounted(true);
+				return;
+			}
+			try {
+				await import("@google/model-viewer");
+				if (!cancelled) setIsMounted(true);
+				return;
+			} catch {
+				// fallback to CDN if package import fails
+			}
+			if (!document.querySelector('script[data-model-viewer-cdn]')) {
+				const script = document.createElement('script');
+				script.type = 'module';
+				script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js';
+				script.setAttribute('data-model-viewer-cdn', 'true');
+				script.onload = () => { if (!cancelled) setIsMounted(true); };
+				script.onerror = () => console.error('Failed to load model-viewer CDN');
+				document.head.appendChild(script);
+			} else {
+				customElements.whenDefined('model-viewer').then(() => { if (!cancelled) setIsMounted(true); });
+			}
+		};
+		ensureDefined();
+		return () => { cancelled = true; };
   }, []);
 
   if (!isMounted) {
-    return (
-      <div
-        className={`flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-lg ${className}`}
-        style={style}
-      >
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
+		return (
+			<div
+				className={`flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-lg ${className}`}
+				style={style}
+			>
+				<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+			</div>
+		);
   }
 
+	// Only set ios-src when a valid USDZ is provided to avoid iOS download prompt
+	const iosAttr = iosSrc && iosSrc.toLowerCase().endsWith('.usdz') ? iosSrc : undefined;
+
   return (
-    <div className={className} style={style}>
-      {/* @ts-ignore - model-viewer is a custom element */}
-      <model-viewer
-        src={src}
-        poster={poster}
-        alt={alt}
-        ar={ar ? "" : undefined}
-        ar-modes="webxr scene-viewer quick-look"
-        camera-controls={cameraControls ? "" : undefined}
-        auto-rotate={autoRotate ? "" : undefined}
-        shadow-intensity="1"
-        style={{ width: '100%', height: '100%' }}
-      >
-        <div slot="ar-button" className="absolute bottom-4 right-4">
-          <button className="bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 rounded-md inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
-            View in AR
-          </button>
-        </div>
-      </model-viewer>
-    </div>
+		<div className={`relative ${className}`} style={style}>
+			{/* @ts-ignore - model-viewer is a custom element */}
+			<model-viewer
+				src={src}
+				poster={poster}
+				alt={alt}
+				ar
+				xr-environment
+				camera-controls
+				auto-rotate={autoRotate ? "" : undefined}
+				shadow-intensity="1"
+				loading="eager"
+				reveal="auto"
+				ios-src={iosAttr}
+				style={{
+					width: "100%",
+					height: "100%",
+					minHeight: "400px",
+					display: "block",
+				}}
+			></model-viewer>
+		</div>
   );
 }
