@@ -1,3 +1,4 @@
+import { ARButton } from '@/components/3d/ARButton';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -25,6 +26,8 @@ interface ControlPanelProps {
   };
   onColorChange: (shape: ColorShape, color: string) => void;
   onResetCamera: () => void;
+  onStartAR: () => void;
+  isARActive: boolean;
 }
 
 export function ControlPanel({
@@ -39,9 +42,27 @@ export function ControlPanel({
   colors,
   onColorChange,
   onResetCamera,
+  onStartAR,
+  isARActive,
 }: ControlPanelProps) {
   return (
     <div className="space-y-6">
+      {/* AR Controls */}
+      <Card className="border-2 border-primary/20 hover:border-primary/50 transition-all bg-card/50 backdrop-blur">
+        <CardHeader>
+          <CardTitle className="text-lg">Augmented Reality</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col gap-2">
+            <ARButton onWebXRClick={onStartAR} disabled={isARActive} />
+            <p className="text-xs text-muted-foreground mt-2">
+              View these 3D objects in your real world environment.
+              Supported on Android (WebXR) and iOS (Quick Look).
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Display Controls */}
       <Card className="border-2 hover:border-primary/50 transition-all bg-card/50 backdrop-blur">
         <CardHeader>

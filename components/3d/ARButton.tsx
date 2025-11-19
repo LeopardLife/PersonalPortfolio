@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { detectARCapabilities } from '@/lib/ar/detectAR';
+import { ARCapabilities, detectARCapabilities } from '@/lib/ar/detectAR';
 import { USDZ_MODELS } from '@/lib/ar/exportModel';
 import { Smartphone } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -12,11 +12,11 @@ interface ARButtonProps {
 }
 
 export function ARButton({ onWebXRClick, disabled }: ARButtonProps) {
-  const [arCapabilities, setArCapabilities] = useState({
+  const [arCapabilities, setArCapabilities] = useState<ARCapabilities>({
     supportsWebXR: false,
     supportsQuickLook: false,
-    platform: 'desktop' as const,
-    recommendedARMethod: 'none' as const,
+    platform: 'desktop',
+    recommendedARMethod: 'none',
   });
   const [isLoading, setIsLoading] = useState(true);
 

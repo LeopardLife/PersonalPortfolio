@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export function InfoCards() {
   return (
-    <div className="mt-12 grid md:grid-cols-3 gap-6">
+    <div className="mt-12 grid md:grid-cols-4 gap-6">
       <Card className="border-2 hover:border-primary/50 transition-all bg-card/50 backdrop-blur">
         <CardHeader>
           <CardTitle className="text-base">Camera Controls</CardTitle>
@@ -16,12 +16,23 @@ export function InfoCards() {
 
       <Card className="border-2 hover:border-primary/50 transition-all bg-card/50 backdrop-blur">
         <CardHeader>
+          <CardTitle className="text-base">AR Experience</CardTitle>
+        </CardHeader>
+        <CardContent className="text-sm text-muted-foreground space-y-2">
+          <p>• <strong>Android:</strong> Uses WebXR (Chrome)</p>
+          <p>• <strong>iOS:</strong> Uses Quick Look (Safari)</p>
+          <p>• <strong>Features:</strong> Place objects in real world</p>
+        </CardContent>
+      </Card>
+
+      <Card className="border-2 hover:border-primary/50 transition-all bg-card/50 backdrop-blur">
+        <CardHeader>
           <CardTitle className="text-base">Technologies Used</CardTitle>
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground space-y-2">
           <p>• <strong>Three.js:</strong> 3D graphics library</p>
+          <p>• <strong>WebXR:</strong> AR/VR standard</p>
           <p>• <strong>React:</strong> UI framework</p>
-          <p>• <strong>TypeScript:</strong> Type safety</p>
         </CardContent>
       </Card>
 

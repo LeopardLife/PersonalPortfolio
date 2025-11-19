@@ -24,7 +24,7 @@ export default function ThreeDemoPage() {
   const [showStats, setShowStats] = useState(true);
 
   // Three.js scene hook
-  const { canvasRef, fps, resetCamera } = useThreeScene({
+  const { canvasRef, fps, resetCamera, startAR, isARActive } = useThreeScene({
     colors,
     wireframe,
     lightIntensity,
@@ -105,6 +105,8 @@ export default function ThreeDemoPage() {
               colors={colors}
               onColorChange={handleColorChange}
               onResetCamera={resetCamera}
+              onStartAR={startAR}
+              isARActive={isARActive}
             />
           </motion.div>
         </div>

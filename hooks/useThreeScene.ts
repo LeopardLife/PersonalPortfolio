@@ -26,6 +26,7 @@ export function useThreeScene({
   const objectsRef = useRef<THREE.Mesh[]>([]);
   const animationIdRef = useRef<number | null>(null);
   const [fps, setFps] = useState(60);
+  const [isARActive, setIsARActive] = useState(false);
 
   // Initialize scene
   useEffect(() => {
@@ -48,9 +49,10 @@ export function useThreeScene({
     cameraRef.current = camera;
 
     // Renderer setup
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(canvasRef.current.clientWidth, canvasRef.current.clientHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.xr.enabled = true; // Enable WebXR
     canvasRef.current.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
@@ -85,15 +87,33 @@ export function useThreeScene({
     const controls = setupMouseControls(renderer, camera);
 
     // Animation loop
-    const animate = createAnimationLoop(
-      renderer,
-      scene,
-      camera,
-      objectsRef,
-      animationSpeed,
-      setFps
-    );
-    animate();
+    let lastTime = performance.now();
+    let frameCount = 0;
+    let fpsUpdateTime = performance.now();
+
+    renderer.setAnimationLoop((time) => {
+      const currentTime = performance.now();
+
+      // Update FPS
+      frameCount++;
+      if (currentTime - fpsUpdateTime >= 1000) {
+        setFps(frameCount);
+        frameCount = 0;
+        fpsUpdateTime = currentTime;
+      }
+
+      // Animate objects
+      objectsRef.current.forEach((obj, index) => {
+        obj.rotation.x += 0.01 * animationSpeed;
+        obj.rotation.y += 0.01 * animationSpeed;
+
+        // Floating effect
+        const originalY = [0, 0, 0, 0][index];
+        obj.position.y = originalY + Math.sin(currentTime * 0.001 + index) * 0.3;
+      });
+
+      renderer.render(scene, camera);
+    });
 
     // Handle window resize
     const handleResize = () => {
@@ -107,9 +127,7 @@ export function useThreeScene({
 
     // Cleanup
     return () => {
-      if (animationIdRef.current) {
-        cancelAnimationFrame(animationIdRef.current);
-      }
+      renderer.setAnimationLoop(null);
       controls.cleanup();
       window.removeEventListener('resize', handleResize);
       renderer.dispose();
@@ -117,7 +135,7 @@ export function useThreeScene({
         canvasRef.current.removeChild(renderer.domElement);
       }
     };
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Update wireframe
   useEffect(() => {
@@ -161,7 +179,30 @@ export function useThreeScene({
     }
   };
 
-  return { canvasRef, fps, resetCamera };
+  const startAR = async () => {
+    if (!rendererRef.current) return;
+
+    try {
+      const session = await navigator.xr?.requestSession('immersive-ar', {
+        requiredFeatures: ['local-floor', 'hit-test'],
+        optionalFeatures: ['dom-overlay'],
+        domOverlay: { root: document.body }
+      });
+
+      if (session) {
+        rendererRef.current.xr.setSession(session);
+        setIsARActive(true);
+
+        session.addEventListener('end', () => {
+          setIsARActive(false);
+        });
+      }
+    } catch (error) {
+      console.error('Failed to start AR session:', error);
+    }
+  };
+
+  return { canvasRef, fps, resetCamera, startAR, isARActive };
 }
 
 // Helper functions
@@ -169,29 +210,29 @@ function createObjects(colors: { box: string; sphere: string; torus: string; con
   const objects: THREE.Mesh[] = [];
 
   // Box
-  const boxGeometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+  const boxGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5); // Smaller for AR
   const boxMaterial = new THREE.MeshStandardMaterial({
     color: colors.box,
     metalness: 0.5,
     roughness: 0.2,
   });
   const box = new THREE.Mesh(boxGeometry, boxMaterial);
-  box.position.set(-3, 0, 0);
+  box.position.set(-1, 0, -2);
   objects.push(box);
 
   // Sphere
-  const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+  const sphereGeometry = new THREE.SphereGeometry(0.3, 32, 32);
   const sphereMaterial = new THREE.MeshStandardMaterial({
     color: colors.sphere,
     metalness: 0.5,
     roughness: 0.2,
   });
   const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-  sphere.position.set(3, 0, 0);
+  sphere.position.set(1, 0, -2);
   objects.push(sphere);
 
   // Torus
-  const torusGeometry = new THREE.TorusGeometry(0.8, 0.3, 16, 100);
+  const torusGeometry = new THREE.TorusGeometry(0.25, 0.1, 16, 100);
   const torusMaterial = new THREE.MeshStandardMaterial({
     color: colors.torus,
     metalness: 0.5,
@@ -202,14 +243,14 @@ function createObjects(colors: { box: string; sphere: string; torus: string; con
   objects.push(torus);
 
   // Cone
-  const coneGeometry = new THREE.ConeGeometry(1, 2, 32);
+  const coneGeometry = new THREE.ConeGeometry(0.3, 0.6, 32);
   const coneMaterial = new THREE.MeshStandardMaterial({
     color: colors.cone,
     metalness: 0.5,
     roughness: 0.2,
   });
   const cone = new THREE.Mesh(coneGeometry, coneMaterial);
-  cone.position.set(0, 0, 3);
+  cone.position.set(0, 0, -1);
   objects.push(cone);
 
   return objects;
@@ -273,46 +314,4 @@ function setupMouseControls(renderer: THREE.WebGLRenderer, camera: THREE.Perspec
       renderer.domElement.removeEventListener('wheel', onWheel);
     },
   };
-}
-
-function createAnimationLoop(
-  renderer: THREE.WebGLRenderer,
-  scene: THREE.Scene,
-  camera: THREE.PerspectiveCamera,
-  objectsRef: React.MutableRefObject<THREE.Mesh[]>,
-  animationSpeed: number,
-  setFps: (fps: number) => void
-) {
-  let lastTime = performance.now();
-  let frameCount = 0;
-  let fpsUpdateTime = performance.now();
-  let animationId: number;
-
-  const animate = () => {
-    const currentTime = performance.now();
-    lastTime = currentTime;
-
-    // Update FPS
-    frameCount++;
-    if (currentTime - fpsUpdateTime >= 1000) {
-      setFps(frameCount);
-      frameCount = 0;
-      fpsUpdateTime = currentTime;
-    }
-
-    // Animate objects
-    objectsRef.current.forEach((obj, index) => {
-      obj.rotation.x += 0.01 * animationSpeed;
-      obj.rotation.y += 0.01 * animationSpeed;
-
-      // Floating effect
-      const originalY = [0, 0, 0, 0][index];
-      obj.position.y = originalY + Math.sin(currentTime * 0.001 + index) * 0.3;
-    });
-
-    renderer.render(scene, camera);
-    animationId = requestAnimationFrame(animate);
-  };
-
-  return animate;
 }
