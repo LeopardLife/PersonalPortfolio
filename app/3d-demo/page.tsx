@@ -1,39 +1,47 @@
 'use client';
 
-import { ControlPanel } from '@/components/3d/ControlPanel';
-import { InfoCards } from '@/components/3d/InfoCards';
-import { SceneCanvas } from '@/components/3d/SceneCanvas';
-import { useThreeScene } from '@/hooks/useThreeScene';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
+import { Box, Sparkles } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
 
-type ColorShape = 'box' | 'sphere' | 'torus' | 'cone';
+const ModelViewerWrapper = dynamic(() => import('@/components/3d/ModelViewerWrapper'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center bg-card/50">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+    </div>
+  ),
+});
+
+const MODELS = [
+  {
+    id: 'astronaut',
+    name: 'Astronaut',
+    src: 'https://modelviewer.dev/shared-assets/models/Astronaut.glb',
+    poster: 'https://modelviewer.dev/shared-assets/models/Astronaut.webp',
+    alt: 'A 3D model of an astronaut',
+  },
+  {
+    id: 'robot',
+    name: 'Robot Expressive',
+    src: 'https://modelviewer.dev/shared-assets/models/RobotExpressive.glb',
+    poster: 'https://modelviewer.dev/shared-assets/models/RobotExpressive.webp',
+    alt: 'A 3D model of a robot',
+  },
+  {
+    id: 'chair',
+    name: 'Eames Chair',
+    src: 'https://modelviewer.dev/shared-assets/models/Chair.glb',
+    poster: 'https://modelviewer.dev/shared-assets/models/Chair.webp',
+    alt: 'A 3D model of a chair',
+  }
+];
 
 export default function ThreeDemoPage() {
-  // State management
-  const [wireframe, setWireframe] = useState(false);
-  const [colors, setColors] = useState({
-    box: '#3b82f6',
-    sphere: '#10b981',
-    torus: '#f59e0b',
-    cone: '#ef4444',
-  });
-  const [lightIntensity, setLightIntensity] = useState(1);
-  const [animationSpeed, setAnimationSpeed] = useState(1);
-  const [showStats, setShowStats] = useState(true);
-
-  // Three.js scene hook
-  const { canvasRef, fps, resetCamera, startAR, isARActive } = useThreeScene({
-    colors,
-    wireframe,
-    lightIntensity,
-    animationSpeed,
-  });
-
-  const handleColorChange = (shape: ColorShape, color: string) => {
-    setColors(prev => ({ ...prev, [shape]: color }));
-  };
+  const [selectedModel, setSelectedModel] = useState(MODELS[0]);
 
   return (
     <div className="min-h-screen pt-24 pb-16 relative">
@@ -57,68 +65,75 @@ export default function ThreeDemoPage() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6"
           >
             <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-primary">Interactive 3D Experience</span>
+            <span className="text-sm font-medium text-primary">AR Ready Experience</span>
           </motion.div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
             <span className="bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-transparent bg-clip-text">
-              Three.js Demo
+              Interactive 3D & AR
             </span>
           </h1>
           <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Interactive 3D scene with camera controls, real-time lighting adjustments, and customizable animations.
-            Built with vanilla Three.js.
+            Explore high-quality 3D models with built-in Augmented Reality support.
+            Works seamlessly on Android (WebXR) and iOS (Quick Look).
           </p>
         </motion.div>
 
         {/* Main Content Grid */}
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* 3D Canvas */}
+          {/* 3D Viewer */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="lg:col-span-2"
+            className="lg:col-span-2 h-[500px] bg-card/50 backdrop-blur border-2 border-primary/20 rounded-xl overflow-hidden relative"
           >
-            <SceneCanvas
-              canvasRef={canvasRef}
-              showStats={showStats}
-              fps={fps}
+            <ModelViewerWrapper
+              src={selectedModel.src}
+              poster={selectedModel.poster}
+              alt={selectedModel.alt}
+              className="w-full h-full"
             />
           </motion.div>
 
-          {/* Control Panel */}
+          {/* Controls */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
+            className="space-y-6"
           >
-            <ControlPanel
-              wireframe={wireframe}
-              setWireframe={setWireframe}
-              showStats={showStats}
-              setShowStats={setShowStats}
-              lightIntensity={lightIntensity}
-              setLightIntensity={setLightIntensity}
-              animationSpeed={animationSpeed}
-              setAnimationSpeed={setAnimationSpeed}
-              colors={colors}
-              onColorChange={handleColorChange}
-              onResetCamera={resetCamera}
-              onStartAR={startAR}
-              isARActive={isARActive}
-            />
+            <Card className="border-2 hover:border-primary/50 transition-all bg-card/50 backdrop-blur">
+              <CardContent className="pt-6">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <Box className="w-5 h-5" />
+                  Select Model
+                </h3>
+                <div className="grid gap-3">
+                  {MODELS.map((model) => (
+                    <Button
+                      key={model.id}
+                      variant={selectedModel.id === model.id ? "default" : "outline"}
+                      className="w-full justify-start"
+                      onClick={() => setSelectedModel(model)}
+                    >
+                      {model.name}
+                    </Button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 hover:border-primary/50 transition-all bg-card/50 backdrop-blur">
+              <CardContent className="pt-6 space-y-4 text-sm text-muted-foreground">
+                <h3 className="text-lg font-semibold text-foreground mb-2">Instructions</h3>
+                <p>• <strong>Rotate:</strong> Drag with one finger/mouse</p>
+                <p>• <strong>Zoom:</strong> Pinch or scroll wheel</p>
+                <p>• <strong>AR:</strong> Click the button in bottom-right corner on mobile devices</p>
+              </CardContent>
+            </Card>
           </motion.div>
         </div>
-
-        {/* Info Cards */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          <InfoCards />
-        </motion.div>
       </div>
     </div>
   );

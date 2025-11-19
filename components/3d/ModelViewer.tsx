@@ -12,18 +12,32 @@ declare global {
 
 interface ModelViewerJSX {
   src?: string;
-  'camera-controls'?: boolean;
-  'auto-rotate'?: boolean;
+  poster?: string;
+  alt?: string;
+  ar?: boolean | string;
+  'ar-modes'?: string;
+  'ar-scale'?: string;
+  'camera-controls'?: boolean | string;
+  'auto-rotate'?: boolean | string;
   'rotation-per-second'?: string;
   'interaction-prompt'?: string;
+  'interaction-prompt-threshold'?: string;
   'camera-orbit'?: string;
+  'min-camera-orbit'?: string;
+  'max-camera-orbit'?: string;
+  'field-of-view'?: string;
+  'min-field-of-view'?: string;
+  'max-field-of-view'?: string;
   'environment-image'?: string;
   'shadow-intensity'?: string;
   'shadow-softness'?: string;
   exposure?: string;
   'animation-name'?: string;
   'animation-crossfade-duration'?: string;
+  loading?: 'auto' | 'lazy' | 'eager';
+  reveal?: 'auto' | 'interaction' | 'manual';
   style?: React.CSSProperties;
+  className?: string;
 }
 
 export default function ModelViewer() {
