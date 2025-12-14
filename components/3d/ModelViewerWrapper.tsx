@@ -3,31 +3,31 @@
 import { useEffect, useState } from 'react';
 
 interface ModelViewerProps {
-  src: string;
-  poster?: string;
-  alt: string;
-  ar?: boolean;
-  autoRotate?: boolean;
-  cameraControls?: boolean;
+	src: string;
+	poster?: string;
+	alt: string;
+	ar?: boolean;
+	autoRotate?: boolean;
+	cameraControls?: boolean;
 	iosSrc?: string;
-  className?: string;
-  style?: React.CSSProperties;
+	className?: string;
+	style?: React.CSSProperties;
 }
 
 export default function ModelViewerWrapper({
-  src,
-  poster,
-  alt,
-  ar = true,
-  autoRotate = true,
-  cameraControls = true,
-  iosSrc,
-  className,
-  style,
+	src,
+	poster,
+	alt,
+	ar = true,
+	autoRotate = true,
+	cameraControls = true,
+	iosSrc,
+	className,
+	style,
 }: ModelViewerProps) {
-  const [isMounted, setIsMounted] = useState(false);
+	const [isMounted, setIsMounted] = useState(false);
 
-  useEffect(() => {
+	useEffect(() => {
 		// Ensure <model-viewer> is defined once across HMR reloads
 		let cancelled = false;
 		const ensureDefined = async () => {
@@ -56,9 +56,9 @@ export default function ModelViewerWrapper({
 		};
 		ensureDefined();
 		return () => { cancelled = true; };
-  }, []);
+	}, []);
 
-  if (!isMounted) {
+	if (!isMounted) {
 		return (
 			<div
 				className={`flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-lg ${className}`}
@@ -67,12 +67,12 @@ export default function ModelViewerWrapper({
 				<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
 			</div>
 		);
-  }
+	}
 
 	// Only set ios-src when a valid USDZ is provided to avoid iOS download prompt
 	const iosAttr = iosSrc && iosSrc.toLowerCase().endsWith('.usdz') ? iosSrc : undefined;
 
-  return (
+	return (
 		<div className={`relative ${className}`} style={style}>
 			{/* @ts-ignore - model-viewer is a custom element */}
 			<model-viewer
@@ -87,13 +87,8 @@ export default function ModelViewerWrapper({
 				loading="eager"
 				reveal="auto"
 				ios-src={iosAttr}
-				style={{
-					width: "100%",
-					height: "100%",
-					minHeight: "400px",
-					display: "block",
-				}}
+				className='w-full h-full min-h-[400px] min-w-[400px] block'
 			></model-viewer>
 		</div>
-  );
+	);
 }

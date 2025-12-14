@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import styles from './ModelViewer.module.css';
 
 declare global {
 	namespace JSX {
@@ -45,13 +46,21 @@ export default function ModelViewer() {
 	const modelViewerRef = useRef<HTMLElement>(null);
 
 	useEffect(() => {
-		const scriptUrl = "https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js";
-		if (!document.querySelector(`script[src="${scriptUrl}"]`)) {
-			const script = document.createElement("script");
-			script.type = "module";
-			script.src = scriptUrl;
-			document.head.appendChild(script);
+		// Check if model-viewer is already defined
+		if (customElements.get("model-viewer")) {
+			return;
 		}
+
+		// Check if script is already being loaded
+		const scriptUrl = "https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js";
+		if (document.querySelector(`script[src="${scriptUrl}"]`)) {
+			return;
+		}
+
+		const script = document.createElement("script");
+		script.type = "module";
+		script.src = scriptUrl;
+		document.head.appendChild(script);
 	}, []);
 
 	return (
@@ -64,7 +73,7 @@ export default function ModelViewer() {
 			shadow-intensity="1"
 			camera-controls
 			touch-action="pan-y"
-			style={{ width: "100%", height: "100%" }}
+			className="w-full h-full"
 		></model-viewer>
 	);
 }
