@@ -1,0 +1,35 @@
+/* ModelViewerWrapper styles */
+.loadingContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(243 244 246);
+    border-radius: 0.5rem;
+}
+
+.loadingContainer.dark {
+    background-color: rgb(31 41 55);
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+    border-radius: 9999px;
+    height: 2rem;
+    width: 2rem;
+    border-bottom-width: 2px;
+    border-color: hsl(var(--primary));
+}
+
+.modelContainer {
+    position: relative;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

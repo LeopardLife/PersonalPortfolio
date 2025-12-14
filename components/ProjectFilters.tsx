@@ -52,6 +52,7 @@ export default function ProjectFilters({
             <button
               onClick={() => onSearchChange('')}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              aria-label="Clear search"
             >
               <X className="h-4 w-4" />
             </button>
@@ -160,6 +161,7 @@ export default function ProjectFilters({
               <button
                 onClick={() => onCategoryChange('All')}
                 className="ml-1 hover:text-foreground"
+                aria-label="Remove category filter"
               >
                 <X className="h-3 w-3" />
               </button>
@@ -172,6 +174,7 @@ export default function ProjectFilters({
               <button
                 onClick={() => onTechnologyChange('All')}
                 className="ml-1 hover:text-foreground"
+                aria-label="Remove technology filter"
               >
                 <X className="h-3 w-3" />
               </button>
@@ -184,6 +187,7 @@ export default function ProjectFilters({
               <button
                 onClick={() => onSearchChange('')}
                 className="ml-1 hover:text-foreground"
+                aria-label="Remove search filter"
               >
                 <X className="h-3 w-3" />
               </button>

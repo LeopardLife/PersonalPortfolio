@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import styles from './ModelViewerWrapper.module.css';
 
 interface ModelViewerProps {
 	src: string;
@@ -11,7 +12,6 @@ interface ModelViewerProps {
 	cameraControls?: boolean;
 	iosSrc?: string;
 	className?: string;
-	style?: React.CSSProperties;
 }
 
 export default function ModelViewerWrapper({
@@ -23,7 +23,6 @@ export default function ModelViewerWrapper({
 	cameraControls = true,
 	iosSrc,
 	className,
-	style,
 }: ModelViewerProps) {
 	const [isMounted, setIsMounted] = useState(false);
 
@@ -60,11 +59,8 @@ export default function ModelViewerWrapper({
 
 	if (!isMounted) {
 		return (
-			<div
-				className={`flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-lg ${className}`}
-				style={style}
-			>
-				<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+			<div className={`${styles.loadingContainer} ${className || ''}`}>
+				<div className={styles.spinner}></div>
 			</div>
 		);
 	}
@@ -73,7 +69,7 @@ export default function ModelViewerWrapper({
 	const iosAttr = iosSrc && iosSrc.toLowerCase().endsWith('.usdz') ? iosSrc : undefined;
 
 	return (
-		<div className={`relative ${className}`} style={style}>
+		<div className={`${styles.modelContainer} ${className || ''}`}>
 			{/* @ts-ignore - model-viewer is a custom element */}
 			<model-viewer
 				src={src}

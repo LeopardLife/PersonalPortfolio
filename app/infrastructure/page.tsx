@@ -460,17 +460,18 @@ export default function InfrastructurePage() {
                       'Alpine Linux base image (5MB vs 900MB)',
                       'Automated health checks and restarts'
                     ].map((item, idx) => (
-                      <motion.li
-                        key={idx}
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: idx * 0.1 }}
-                        className="flex items-start gap-3 text-sm text-muted-foreground"
-                      >
-                        <div className="w-1.5 h-1.5 rounded-full bg-yellow-500 mt-2 flex-shrink-0" />
-                        <span>{item}</span>
-                      </motion.li>
+                      <li key={idx}>
+                        <motion.div
+                          initial={{ opacity: 0, x: -20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: idx * 0.1 }}
+                          className="flex items-start gap-3 text-sm text-muted-foreground"
+                        >
+                          <div className="w-1.5 h-1.5 rounded-full bg-yellow-500 mt-2 flex-shrink-0" />
+                          <span>{item}</span>
+                        </motion.div>
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -489,17 +490,18 @@ export default function InfrastructurePage() {
                       'Environment secrets via runtime injection',
                       'Automated SSL/TLS certificate management'
                     ].map((item, idx) => (
-                      <motion.li
-                        key={idx}
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: idx * 0.1 }}
-                        className="flex items-start gap-3 text-sm text-muted-foreground"
-                      >
-                        <div className="w-1.5 h-1.5 rounded-full bg-green-500 mt-2 flex-shrink-0" />
-                        <span>{item}</span>
-                      </motion.li>
+                      <li key={idx}>
+                        <motion.div
+                          initial={{ opacity: 0, x: -20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: idx * 0.1 }}
+                          className="flex items-start gap-3 text-sm text-muted-foreground"
+                        >
+                          <div className="w-1.5 h-1.5 rounded-full bg-green-500 mt-2 flex-shrink-0" />
+                          <span>{item}</span>
+                        </motion.div>
+                      </li>
                     ))}
                   </ul>
                 </div>
