@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
@@ -24,6 +25,7 @@ export default function RootLayout({
 				<Providers>
 					<Navbar />
 					{children}
+					<Footer />
 					<Toaster />
 				</Providers>
 			</body>

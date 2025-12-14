@@ -5,6 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { motion } from 'framer-motion';
 import {
   Activity,
+  ArrowDown,
+  ArrowRight,
   CloudCog,
   Container,
   Cpu,
@@ -18,137 +20,138 @@ import {
 } from 'lucide-react';
 import { SiCloudflare, SiDocker, SiNextdotjs, SiPostgresql, SiRaspberrypi } from 'react-icons/si';
 
-export default function InfrastructurePage() {
-  const techStack = [
-    {
-      category: 'Hardware',
-      icon: Cpu,
-      color: 'text-red-500',
-      items: [
-        {
-          name: 'Raspberry Pi 4',
-          description: '4GB RAM, Quad-core ARM Cortex-A72',
-          icon: SiRaspberrypi,
-          specs: ['ARM Cortex-A72', '4GB RAM', 'MicroSD Storage'],
-        },
-      ],
-    },
-    {
-      category: 'Network & Security',
-      icon: Network,
-      color: 'text-orange-500',
-      items: [
-        {
-          name: 'Cloudflare Tunnel',
-          description: 'Zero-trust network access without exposing ports',
-          icon: SiCloudflare,
-          specs: ['Zero Trust', 'No Port Forwarding', 'DDoS Protection'],
-        },
-      ],
-    },
-    {
-      category: 'Application Stack',
-      icon: Container,
-      color: 'text-blue-500',
-      items: [
-        {
-          name: 'Docker',
-          description: 'Containerized deployment for consistency',
-          icon: SiDocker,
-          specs: ['Multi-stage Build', 'Docker Compose', 'Isolated Environment'],
-        },
-        {
-          name: 'Next.js 16',
-          description: 'React framework with App Router & Turbopack',
-          icon: SiNextdotjs,
-          specs: ['App Router', 'Turbopack', 'Standalone Build'],
-        },
-        {
-          name: 'PostgreSQL',
-          description: 'Database hosted on Neon serverless',
-          icon: SiPostgresql,
-          specs: ['Serverless', 'Auto-scaling', 'Cloud-hosted'],
-        },
-      ],
-    },
-  ];
-
-  const architecture = [
-    {
-      title: 'Client Request',
-      icon: Globe,
-      description: 'User accesses website via HTTPS',
-      details: ['DNS Resolution', 'SSL/TLS Handshake', 'CDN Edge Nodes'],
-    },
-    {
-      title: 'Cloudflare Network',
-      icon: CloudCog,
-      description: 'Global edge network with DDoS protection',
-      details: ['Edge Caching', 'WAF Rules', 'Bot Management'],
-    },
-    {
-      title: 'Cloudflare Tunnel',
-      icon: Shield,
-      description: 'Secure tunnel to Raspberry Pi',
-      details: ['Zero Trust', 'Encrypted Connection', 'No Open Ports'],
-    },
-    {
-      title: 'Raspberry Pi',
-      icon: Server,
-      description: 'Docker containers running Next.js',
-      details: ['Docker Engine', 'Container Orchestration', 'Health Checks'],
-    },
-    {
-      title: 'Database',
-      icon: HardDrive,
-      description: 'Neon PostgreSQL serverless database',
-      details: ['Automatic Backups', 'Connection Pooling', 'Low Latency'],
-    },
-  ];
-
-  const features = [
-    {
-      icon: Zap,
-      title: 'High Performance',
-      description: 'Optimized Docker images with multi-stage builds and Next.js standalone output',
-      color: 'text-yellow-500',
-    },
-    {
-      icon: Shield,
-      title: 'Secure by Design',
-      description: 'Zero-trust architecture with Cloudflare Tunnel, no exposed ports or public IP',
-      color: 'text-green-500',
-    },
-    {
-      icon: Activity,
-      title: 'Always Available',
-      description: 'Container health checks, automatic restarts, and Cloudflare global network',
-      color: 'text-blue-500',
-    },
-    {
-      icon: Lock,
-      title: 'DDoS Protected',
-      description: 'Cloudflare enterprise-grade protection against malicious traffic',
-      color: 'text-purple-500',
-    },
-  ];
-
-  const containerVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        staggerChildren: 0.1,
+const techStack = [
+  {
+    category: 'Hardware',
+    icon: Cpu,
+    color: 'text-red-500',
+    items: [
+      {
+        name: 'Raspberry Pi 4',
+        description: '4GB RAM, Quad-core ARM Cortex-A72',
+        icon: SiRaspberrypi,
+        specs: ['ARM Cortex-A72', '4GB RAM', 'MicroSD Storage'],
       },
-    },
-  };
+    ],
+  },
+  {
+    category: 'Network & Security',
+    icon: Network,
+    color: 'text-orange-500',
+    items: [
+      {
+        name: 'Cloudflare Tunnel',
+        description: 'Zero-trust network access without exposing ports',
+        icon: SiCloudflare,
+        specs: ['Zero Trust', 'No Port Forwarding', 'DDoS Protection'],
+      },
+    ],
+  },
+  {
+    category: 'Application Stack',
+    icon: Container,
+    color: 'text-blue-500',
+    items: [
+      {
+        name: 'Docker',
+        description: 'Containerized deployment for consistency',
+        icon: SiDocker,
+        specs: ['Multi-stage Build', 'Docker Compose', 'Isolated Environment'],
+      },
+      {
+        name: 'Next.js 16',
+        description: 'React framework with App Router & Turbopack',
+        icon: SiNextdotjs,
+        specs: ['App Router', 'Turbopack', 'Standalone Build'],
+      },
+      {
+        name: 'PostgreSQL',
+        description: 'Database hosted on Neon serverless',
+        icon: SiPostgresql,
+        specs: ['Serverless', 'Auto-scaling', 'Cloud-hosted'],
+      },
+    ],
+  },
+];
 
-  const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: { opacity: 1, x: 0 },
-  };
+const architecture = [
+  {
+    title: 'Client Request',
+    icon: Globe,
+    description: 'User accesses website via HTTPS',
+    details: ['DNS Resolution', 'SSL/TLS Handshake', 'CDN Edge Nodes'],
+  },
+  {
+    title: 'Cloudflare Network',
+    icon: CloudCog,
+    description: 'Global edge network with DDoS protection',
+    details: ['Edge Caching', 'WAF Rules', 'Bot Management'],
+  },
+  {
+    title: 'Cloudflare Tunnel',
+    icon: Shield,
+    description: 'Secure tunnel to Raspberry Pi',
+    details: ['Zero Trust', 'Encrypted Connection', 'No Open Ports'],
+  },
+  {
+    title: 'Raspberry Pi',
+    icon: Server,
+    description: 'Docker containers running Next.js',
+    details: ['Docker Engine', 'Container Orchestration', 'Health Checks'],
+  },
+  {
+    title: 'Database',
+    icon: HardDrive,
+    description: 'Neon PostgreSQL serverless database',
+    details: ['Automatic Backups', 'Connection Pooling', 'Low Latency'],
+  },
+];
+
+const features = [
+  {
+    icon: Zap,
+    title: 'High Performance',
+    description: 'Optimized Docker images with multi-stage builds and Next.js standalone output',
+    color: 'text-yellow-500',
+  },
+  {
+    icon: Shield,
+    title: 'Secure by Design',
+    description: 'Zero-trust architecture with Cloudflare Tunnel, no exposed ports or public IP',
+    color: 'text-green-500',
+  },
+  {
+    icon: Activity,
+    title: 'Always Available',
+    description: 'Container health checks, automatic restarts, and Cloudflare global network',
+    color: 'text-blue-500',
+  },
+  {
+    icon: Lock,
+    title: 'DDoS Protected',
+    description: 'Cloudflare enterprise-grade protection against malicious traffic',
+    color: 'text-purple-500',
+  },
+];
+
+const containerVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: { opacity: 1, x: 0 },
+};
+
+export default function InfrastructurePage() {
 
   return (
     <div className="min-h-screen pt-24 pb-16 relative">
@@ -263,8 +266,8 @@ export default function InfrastructurePage() {
                   whileHover={{ y: -8, scale: 1.02 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <Card className="h-full hover:shadow-2xl transition-all border-2 hover:border-primary/50 bg-card/50 backdrop-blur group">
-                    <CardHeader className="pb-4">
+                  <Card className="flex flex-col h-full hover:shadow-2xl transition-all border-2 hover:border-primary/50 bg-card/50 backdrop-blur group">
+                    <CardHeader className="pb-4 flex-none">
                       <div className="flex items-center gap-3 mb-3">
                         <div className={`w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform`}>
                           <Icon className={`w-6 h-6 ${stack.color}`} />
@@ -272,7 +275,7 @@ export default function InfrastructurePage() {
                         <CardTitle className="text-xl group-hover:text-primary transition-colors">{stack.category}</CardTitle>
                       </div>
                     </CardHeader>
-                    <CardContent className="space-y-6">
+                    <CardContent className="space-y-6 flex-1">
                       {stack.items.map((item, itemIdx) => {
                         const ItemIcon = item.icon;
                         return (
@@ -322,52 +325,48 @@ export default function InfrastructurePage() {
           </div>
 
           <div className="relative max-w-6xl mx-auto">
-            {/* Connection lines for desktop */}
-            <div className="hidden lg:block absolute top-[120px] left-[10%] right-[10%] h-1">
-              <div className="h-full bg-gradient-to-r from-transparent via-primary to-transparent opacity-30" />
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary to-primary/0"
-                animate={{ x: ['-100%', '100%'] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 relative z-10">
+            <div className="flex flex-col lg:flex-row items-stretch justify-between gap-4 relative z-10">
               {architecture.map((step, idx) => {
                 const Icon = step.icon;
+                const isLast = idx === architecture.length - 1;
                 return (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: idx * 0.15, duration: 0.5 }}
-                    whileHover={{ y: -10, scale: 1.05 }}
-                  >
-                    <Card className="text-center h-full hover:shadow-2xl transition-all bg-card/50 backdrop-blur border-2 hover:border-primary/50 group">
-                      <CardHeader className="pb-3">
-                        <motion.div
-                          className="mx-auto w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"
-                          whileHover={{ rotate: 360 }}
-                          transition={{ duration: 0.6 }}
-                        >
-                          <Icon className="w-8 h-8 text-primary" />
-                        </motion.div>
-                        <CardTitle className="text-base font-bold mt-2 group-hover:text-primary transition-colors">{step.title}</CardTitle>
-                        <CardDescription className="text-xs leading-relaxed">{step.description}</CardDescription>
-                      </CardHeader>
-                      <CardContent className="pt-0">
-                        <ul className="space-y-2 text-xs text-muted-foreground">
-                          {step.details.map((detail, detailIdx) => (
-                            <li key={detailIdx} className="flex items-start gap-2 hover:text-foreground transition-colors">
-                              <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
-                              <span className="text-left">{detail}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
+                  <div key={idx} className="contents lg:block lg:flex-1">
+                    <motion.div
+                      className="h-full w-full"
+                      initial={{ opacity: 0, y: 50 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: idx * 0.15, duration: 0.5 }}
+                      whileHover={{ y: -10, scale: 1.02 }}
+                    >
+                      <Card className="flex flex-col h-full text-center hover:shadow-2xl transition-all bg-card/50 backdrop-blur border-2 hover:border-primary/50 group relative">
+                        {/* Glowing Border specific to step */}
+                        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity blur-xl -z-10" />
+
+                        <CardHeader className="pb-3 flex-none">
+                          <motion.div
+                            className="mx-auto w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-inner shadow-primary/20"
+                            whileHover={{ rotate: 360 }}
+                            transition={{ duration: 0.6 }}
+                          >
+                            <Icon className="w-8 h-8 text-primary" />
+                          </motion.div>
+                          <CardTitle className="text-base font-bold mt-2 group-hover:text-primary transition-colors">{step.title}</CardTitle>
+                          <CardDescription className="text-xs leading-relaxed">{step.description}</CardDescription>
+                        </CardHeader>
+                        <CardContent className="pt-0 flex-1">
+                          <ul className="space-y-2 text-xs text-muted-foreground">
+                            {step.details.map((detail, detailIdx) => (
+                              <li key={detailIdx} className="flex items-start gap-2 hover:text-foreground transition-colors justify-center lg:justify-start">
+                                <div className="hidden lg:block w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
+                                <span className="text-center lg:text-left">{detail}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  </div>
                 );
               })}
             </div>

@@ -3,11 +3,11 @@
 import { useEffect, useRef } from 'react';
 
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'model-viewer': ModelViewerJSX & React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
-    }
-  }
+	namespace JSX {
+		interface IntrinsicElements {
+			'model-viewer': ModelViewerJSX & React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+		}
+	}
 }
 
 interface ModelViewerJSX {
@@ -45,27 +45,26 @@ export default function ModelViewer() {
 	const modelViewerRef = useRef<HTMLElement>(null);
 
 	useEffect(() => {
-		const script = document.createElement("script");
-		script.type = "module";
-		script.src =
-			"https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js";
-		document.head.appendChild(script);
-
-		return () => {
-			document.head.removeChild(script);
-		};
+		const scriptUrl = "https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js";
+		if (!document.querySelector(`script[src="${scriptUrl}"]`)) {
+			const script = document.createElement("script");
+			script.type = "module";
+			script.src = scriptUrl;
+			document.head.appendChild(script);
+		}
 	}, []);
 
 	return (
 		<model-viewer
 			alt="Neil Armstrong's Spacesuit from the Smithsonian Digitization Programs Office and National Air and Space Museum"
-			src="shared-assets/models/NeilArmstrong.glb"
+			src="https://modelviewer.dev/shared-assets/models/NeilArmstrong.glb"
 			ar
 			environment-image="https://modelviewer.dev/shared-assets/environments/moon_1k.hdr"
 			poster="https://modelviewer.dev/shared-assets/models/NeilArmstrong.webp"
 			shadow-intensity="1"
 			camera-controls
 			touch-action="pan-y"
+			style={{ width: "100%", height: "100%" }}
 		></model-viewer>
 	);
 }
