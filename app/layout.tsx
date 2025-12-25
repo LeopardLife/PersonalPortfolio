@@ -14,6 +14,8 @@ export const metadata: Metadata = {
 		"Fullstack Developer specializing in 3D Web Applications with Next.js, React, and Three.js",
 };
 
+import GoogleAnalytics from "@/components/GoogleAnalytics";
+
 export default function RootLayout({
 	children,
 }: {
@@ -22,6 +24,7 @@ export default function RootLayout({
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body className={inter.className}>
+				<GoogleAnalytics GA_MEASUREMENT_ID="G-MD5VW1NBQM" />
 				<Providers>
 					<Navbar />
 					{children}
