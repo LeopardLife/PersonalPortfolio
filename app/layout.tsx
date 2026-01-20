@@ -8,6 +8,9 @@ import Providers from "./providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
+const GA_MEASUREMENT_ID =
+	process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-MD5VW1NBQM";
+
 export const metadata: Metadata = {
 	title: "Phạm Nguyễn Thuận - Fullstack Developer",
 	description:
@@ -24,7 +27,7 @@ export default function RootLayout({
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body className={inter.className}>
-				<GoogleAnalytics GA_MEASUREMENT_ID="G-MD5VW1NBQM" />
+				<GoogleAnalytics GA_MEASUREMENT_ID={GA_MEASUREMENT_ID} />
 				<Providers>
 					<Navbar />
 					{children}

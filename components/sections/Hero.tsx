@@ -3,6 +3,7 @@
 import ModelViewer from "@/components/3d/ModelViewer";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { trackEvent } from "@/lib/analytics";
 import { motion } from "framer-motion";
 import { ArrowRight, Code2, Database, Layers, Mail } from "lucide-react";
 import Link from "next/link";
@@ -231,7 +232,15 @@ export default function Hero() {
 							transition={{ delay: 0.9 }}
 							className="flex flex-wrap gap-4 pt-4"
 						>
-							<Link href="/projects">
+							<Link
+								href="/projects"
+								onClick={() =>
+									trackEvent("cta_click", {
+										location: "hero",
+										label: "view_my_work",
+									})
+								}
+							>
 								<Button
 									size="lg"
 									className="group bg-gradient-to-r from-primary to-purple-600 hover:opacity-90 gap-2 relative overflow-hidden"
@@ -243,7 +252,15 @@ export default function Hero() {
 									<div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-primary opacity-0 group-hover:opacity-100 transition-opacity" />
 								</Button>
 							</Link>
-							<Link href="/contact">
+							<Link
+								href="/contact"
+								onClick={() =>
+									trackEvent("cta_click", {
+										location: "hero",
+										label: "get_in_touch",
+									})
+								}
+							>
 								<Button
 									size="lg"
 									variant="outline"

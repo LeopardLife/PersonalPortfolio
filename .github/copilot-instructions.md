@@ -1,108 +1,28 @@
 # Personal Portfolio - Copilot Instructions
 
-## Architecture Overview
-Next.js 16 portfolio application with 3D visualizations and modern fullstack architecture.
+## Architecture & Code Layout
+- Next.js 16 App Router app with Turbopack; React 18, Shadcn UI, Tailwind, Framer Motion; 3D via Google Model Viewer web component. Legacy `client/` + `server/` exist but are read-only references—build in `app/` + shared `components/`.
+- Root layout wraps pages with `Navbar`, `Footer`, `Toaster`, GA tracker, and `Providers` (React Query) in [app/layout.tsx](app/layout.tsx). Home page is a client component composing section blocks with motion wrappers in [app/page.tsx](app/page.tsx).
+- Section components live in [components/sections](components/sections) and are all client components for animations/interactivity. Shadcn primitives in [components/ui](components/ui) follow generated structure—regenerate rather than hand-edit.
 
-**Key Stack:**
-- Framework: Next.js 16 with App Router + Turbopack (default)
-- Frontend: React 18 + Shadcn/ui + Tailwind CSS + Framer Motion
-- 3D Graphics: Three.js + React Three Fiber + Google Model Viewer web component
-- Database: PostgreSQL + Drizzle ORM
-- State: React Query (`@tanstack/react-query`) for server state
-- Styling: Tailwind CSS with CSS custom properties controlled by `theme.json`
+## Styling & Theming
+- Theme source: [theme.json](theme.json) (`primary`, `radius`, `appearance`). CSS variables set in [app/globals.css](app/globals.css); Tailwind pulls from them via [tailwind.config.ts](tailwind.config.ts). Dark mode is class-based. Utilities include gradient/glass/glow helpers defined in globals.
 
-**Dual Architecture (Migration in Progress):**
-- **Primary**: `app/` directory (Next.js App Router) - active development
-- **Legacy**: `client/` directory (Vite SPA) + `server/` (Express) - retained for reference
-- Components live in root `components/` shared by both architectures
+## State & Data
+- React Query provided at root in [app/providers.tsx](app/providers.tsx) with `staleTime` 60s. An alternative shared client with custom `getQueryFn`/`apiRequest` exists in [lib/queryClient.ts](lib/queryClient.ts) if you need consistent fetch/error handling.
+- Drizzle + Neon pool configured in [lib/db.ts](lib/db.ts); requires `DATABASE_URL` at runtime (throws if missing). Schema lives in `shared/schema.ts`; migrations via `npm run db:push`.
 
-## Development Workflow
+## 3D Integration
+- Model Viewer component in [components/3d/ModelViewer.tsx](components/3d/ModelViewer.tsx) loads the Google `model-viewer` script once (guards against duplicate loads) and extends JSX typings. Preferred for GLB assets stored under `public/assets/...`; pass `camera-controls/auto-rotate/rotation-per-second` etc. as attributes.
 
-```bash
-npm run dev      # Next.js dev server with Turbopack
-npm run build    # Next.js production build
-npm start        # Next.js production server
-npm run db:push  # Push Drizzle schema changes to PostgreSQL
-```
+## API Routes & External Services
+- Contact form handler in [app/api/contact/route.ts](app/api/contact/route.ts) validates name/email/message, supports Resend (`RESEND_API_KEY`) or optional Nodemailer Gmail (`GMAIL_USER`, `GMAIL_APP_PASSWORD`), currently logs and returns success. Health route exists at `app/api/health/route.ts` (see file for details).
+- Google Analytics ID is wired in layout via `GoogleAnalytics` component; adjust there if changing tracking.
 
-**Important**: Despite legacy `server/` directory, this is now a **Next.js application**. API routes use Next.js Route Handlers in `app/api/*/route.ts`, not Express.
+## Workflows & Commands
+- Dev/build: `npm run dev` (Turbopack), `npm run build`, `npm start`. Database: `npm run db:push` for Drizzle migrations. Default port 3000; Node 20+. Ensure env vars for DB and email before running server or contact endpoint.
 
-## Key Patterns & Conventions
-
-### File Organization
-- **Page Components**: `app/page.tsx` (client component with section imports)
-- **Section Components**: `components/sections/` (Hero, About, Projects, Experience, Contact)
-- **UI Components**: `components/ui/` (Shadcn pattern - never edit manually, regenerate)
-- **3D Components**: `components/3d/` (ModelViewer, Scene3D, FloatingShape)
-- **API Routes**: `app/api/*/route.ts` (Next.js Route Handlers)
-
-### Client vs Server Components
-- **All page/section components use `'use client'` directive** (required for Framer Motion and interactivity)
-- Root layout (`app/layout.tsx`) is server component with metadata
-- Providers wrapper (`app/providers.tsx`) handles React Query setup
-
-### Styling System
-- **Theme Source of Truth**: `theme.json` defines primary color, variant, appearance, radius
-- **CSS Variables**: Injected via `app/globals.css` following Shadcn convention (`--primary`, `--background`, etc.)
-- **Tailwind Config**: `tailwind.config.ts` references CSS variables, content includes `app/`, `components/`, `pages/`
-- **Utility Function**: Use `cn()` from `@/lib/utils` for conditional Tailwind classes
-
-### 3D Integration Patterns
-- **Model Viewer Web Component**: Preferred for GLB files (see `components/3d/ModelViewer.tsx`)
-  - Dynamically loads script from `ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/`
-  - Custom TypeScript declaration for JSX intrinsic element
-  - Props: `camera-controls`, `auto-rotate`, `rotation-per-second`, `interaction-prompt`
-- **Asset Location**: `/public/assets/*.glb` served statically
-- **Background Usage**: 3D elements rendered with low opacity (`opacity-30`) as non-blocking backgrounds
-- **Performance**: Model Viewer handles optimization better than raw Three.js for static models
-
-### Component Architecture
-- **Animation**: Framer Motion with `initial`, `animate`, `transition` props on `motion.div`
-- **Icons**: Mix of Lucide React (`lucide-react`) and React Icons (`react-icons`) - use `Si` prefix for brand logos
-- **Forms**: React Hook Form + Zod validation (setup exists via Shadcn)
-- **Toast Notifications**: Shadcn toast system with `<Toaster />` in layout
-
-### Database Layer
-- **Schema Location**: `shared/schema.ts` (single source of truth)
-- **ORM**: Drizzle with Neon PostgreSQL driver (`@neondatabase/serverless`)
-- **Config**: `drizzle.config.ts` points to `shared/schema.ts`, outputs to `./migrations`
-- **Connection**: Requires `DATABASE_URL` environment variable
-- **Types**: Auto-generated with `$inferSelect` and Zod schemas via `createInsertSchema`
-
-## Critical Integration Points
-
-### Path Aliases
-TypeScript `paths` in `tsconfig.json`:
-- `@/*` → root directory
-- `@/components/*` → `components/`
-- `@/app/*` → `app/`
-- `@/lib/*` → `lib/`
-
-**Note**: Legacy `vite.config.ts` has different aliases (`@` → `client/src`) - ignore when working in Next.js context.
-
-### Next.js Configuration
-- **Transpile Packages**: `transpilePackages: ['three', '@react-three/fiber', '@react-three/drei']` required for 3D libraries
-- **Turbopack**: Default in Next.js 16, empty config to silence webpack warnings
-- **Strict Mode**: Enabled (`reactStrictMode: true`)
-
-### State Management
-- **Query Client**: Configured in `app/providers.tsx` with 60s `staleTime`
-- **Pattern**: Wrap mutations/queries with React Query hooks, defined in component files or custom hooks
-
-## Project-Specific Conventions
-
-### Portfolio Content
-- **Hardcoded Data**: Projects, experience, skills defined inline in section components (no CMS)
-- **Tech Logos**: Icon components from `react-icons/fa` and `react-icons/si` in `Hero.tsx`
-- **Timeline Layout**: Custom `TimelineItem` component in `components/` for experience display
-
-### Migration Notes
-- `client/` and `server/` directories are **legacy** - do not add new features there
-- When adding API routes, use Next.js Route Handlers in `app/api/`
-- Shared types in `shared/` still valid for database schemas
-- Component duplication exists between `client/src/components/` and `components/` - prioritize root `components/`
-
-## Environment Requirements
-- Node.js 20+ (specified in `@types/node`)
-- PostgreSQL database with `DATABASE_URL` configured
-- Development server runs on default Next.js port (3000)
+## Patterns & Conventions
+- All pages/sections are client components to enable Framer Motion; wrap new animated blocks with `motion.*` and initial/animate/transition props for consistency.
+- Use path aliases from `tsconfig.json`: `@/*`, `@/components/*`, `@/app/*`, `@/lib/*`. Ignore legacy Vite aliasing.
+- Prefer background 3D elements at low opacity to avoid blocking content (existing sections use gradients + separators). Reuse `SectionSeparator` pattern from [app/page.tsx](app/page.tsx) when adding new landing sections.

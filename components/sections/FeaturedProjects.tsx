@@ -3,6 +3,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { trackEvent } from "@/lib/analytics";
 import { getFeaturedProjects } from "@/lib/data/projects";
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
@@ -62,7 +63,15 @@ export default function FeaturedProjects() {
 							viewport={{ once: true }}
 							transition={{ duration: 0.5, delay: index * 0.1 }}
 						>
-							<Link href={`/projects/${project.slug}`}>
+							<Link
+								href={`/projects/${project.slug}`}
+								onClick={() =>
+									trackEvent("project_card_click", {
+										slug: project.slug,
+										title: project.title,
+									})
+								}
+							>
 								<Card className="h-full hover:shadow-2xl transition-all border-2 hover:border-primary/50 group cursor-pointer overflow-hidden">
 									{/* Icon Header */}
 									<div className="relative h-32 bg-gradient-to-br from-primary/10 via-purple-500/10 to-pink-500/10 overflow-hidden">
@@ -162,7 +171,14 @@ export default function FeaturedProjects() {
 					transition={{ duration: 0.5, delay: 0.4 }}
 					className="text-center"
 				>
-					<Link href="/projects">
+					<Link
+						href="/projects"
+						onClick={() =>
+							trackEvent("projects_view_all", {
+								source: "featured_section",
+							})
+						}
+					>
 						<Button size="lg" variant="outline" className="gap-2">
 							View All Projects{" "}
 							<ExternalLink className="h-4 w-4" />

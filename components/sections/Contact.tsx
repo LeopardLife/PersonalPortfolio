@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
+import { trackEvent } from "@/lib/analytics";
 import { motion } from "framer-motion";
 import {
 	CheckCircle2,
@@ -47,6 +48,11 @@ export default function Contact() {
 					title: "Message sent! 🎉",
 					description:
 						"Thank you for reaching out. I'll get back to you soon.",
+				});
+				trackEvent("contact_form_submit", {
+					source: "contact_section",
+					has_subject: Boolean(data.subject),
+					message_length: data?.message?.length || 0,
 				});
 				reset();
 			} else {
@@ -189,6 +195,12 @@ export default function Contact() {
 									<motion.a
 										href="mailto:thuandevelop@gmail.com"
 										whileHover={{ x: 4 }}
+										onClick={() =>
+											trackEvent("contact_link_click", {
+												type: "email",
+												source: "contact_section",
+											})
+										}
 										className="flex items-start gap-4 p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 hover:border-blue-500/50 transition-all group"
 									>
 										<div className="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
@@ -210,6 +222,12 @@ export default function Contact() {
 										target="_blank"
 										rel="noopener noreferrer"
 										whileHover={{ x: 4 }}
+										onClick={() =>
+											trackEvent("contact_link_click", {
+												type: "github",
+												source: "contact_section",
+											})
+										}
 										className="flex items-start gap-4 p-4 rounded-xl bg-purple-500/10 border border-purple-500/20 hover:border-purple-500/50 transition-all group"
 									>
 										<div className="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
@@ -229,6 +247,12 @@ export default function Contact() {
 									<motion.a
 										href="tel:+84909275913"
 										whileHover={{ x: 4 }}
+										onClick={() =>
+											trackEvent("contact_link_click", {
+												type: "phone",
+												source: "contact_section",
+											})
+										}
 										className="flex items-start gap-4 p-4 rounded-xl bg-green-500/10 border border-green-500/20 hover:border-green-500/50 transition-all group"
 									>
 										<div className="w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
